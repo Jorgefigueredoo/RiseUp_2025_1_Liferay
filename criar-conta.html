@@ -1,68 +1,97 @@
 <!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criar Conta</title>
-    
-    <link rel="stylesheet" href="css/criar-conta.css">
-</head>
-<body>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Criar Conta - Liferay</title>
+    <link
+      rel="icon"
+      type="image/png"
+      href="assets/logos/title_logo_liferay.png"
+    />
+    <link rel="stylesheet" href="css/criar-conta.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <a href="homepage.html">
+          <img
+            src="assets/logos/liferay-logo-full.svg"
+            alt="Logo Liferay"
+            class="logo"
+          />
+        </a>
+        <h1>Criar conta</h1>
+      </header>
 
-    <div class="container">
-        <form id="register-form">
-            <h1>Criar Conta</h1>
+      <div class="form-container">
+        <form id="register-form">
+          <div class="form-group">
+            <label for="nomeUsuario">Nome de usuário:</label>
+            <input type="text" id="nomeUsuario" name="nomeUsuario" required />
+          </div>
 
-            <div id="message"></div>
+          <div class="form-group">
+            <label for="email">E-mail:</label>
+            <input type="email" id="email" name="email" required />
+          </div>
 
-            <fieldset>
-                                <div class="input-group">
-                    <label for="nomeUsuario">Nome de usuário:</label>
-                    <input type="text" id="nomeUsuario" name="nomeUsuario" required>
-                </div>
+          <div class="form-group">
+            <label for="senha">Senha:</label>
+            <input
+              type="password"
+              id="senha"
+              name="senha"
+              minlength="6"
+              required
+            />
+          </div>
 
-                <div class="input-group">
-                    <label for="email">E-mail:</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
+          <hr class="form-divider" />
 
-                <div class="input-group">
-                    <label for="senha">Senha:</label>
-                    <input type="password" id="senha" name="senha" minlength="6" required>
-                </div>
-            </fieldset>
-            
-            <fieldset>
-                                
-                <div class="input-group">
-                    <label for="nomeCompleto">Nome Completo:</label>
-                    <input type="text" id="nomeCompleto" name="nomeCompleto" required>
-                </div>
-                
-                <div class="input-group">
-                    <label for="titulo">Título (ex: Desenvolvedor Full-stack):</label>
-                    <input type="text" id="titulo" name="titulo">
-                </div>
+          <div class="form-group">
+            <label for="nomeCompleto">Nome Completo:</label>
+            <input type="text" id="nomeCompleto" name="nomeCompleto" required />
+          </div>
 
-                <div class="input-group">
-                    <label for="sobreMim">Sobre mim:</label>
-                    <textarea id="sobreMim" name="sobreMim" rows="3"></textarea>
-                </div>
+          <div class="form-group">
+            <label for="titulo">Título (ex: Desenvolvedor Full-stack):</label>
+            <input type="text" id="titulo" name="titulo" />
+          </div>
 
-                <div class="input-group">
-                    <label for="habilidades">Habilidades (separadas por vírgula):</label>
-                    <input type="text" id="habilidades" name="habilidades" placeholder="Ex: Java, React, SQL">
-                </div>
-            </fieldset>
+          <div class="form-group">
+            <label for="sobreMim">Sobre mim:</label>
+            <textarea id="sobreMim" name="sobreMim" rows="3"></textarea>
+          </div>
 
-            <button type="submit" id="submit-button">Criar conta</button>
+          <div class="form-group">
+            <label for="habilidades">Habilidades (separadas por vírgula):</label>
+            <input
+              type="text"
+              id="habilidades"
+              name="habilidades"
+              placeholder="Ex: Java, React, SQL"
+            />
+          </div>
 
-            <p class="login-link">
-                Já tem uma conta? <a href="login.html">Faça o login</a>
-            </p>
-        </form>
-    </div>
+          <div id="message" class="feedback-message"></div>
 
-    <script src="js/criar-conta.js"></script>
-</body>
-</html> 
+          <div class="form-actions">
+            <button
+              type="button"
+              class="btn-cancelar"
+              onclick="window.location.href='login.html'"
+            >
+              Já tem uma conta?
+            </button>
+            <button type="submit" class="btn-criar" id="submit-button">
+              Criar Conta
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="js/criar-conta.js"></script>
+  </body>
+</html>
