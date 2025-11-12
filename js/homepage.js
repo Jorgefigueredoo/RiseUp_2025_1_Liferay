@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
   carregarEventos();
   setupCarousels();
   setupLogout();
+  setupGlobalSearch();
 });
 
 // =====================
@@ -210,5 +211,24 @@ function setupCarousels() {
 
     updateCarousel();
     window.addEventListener("resize", updateCarousel);
+  });
+}
+
+// =====================
+// GLOBAL SEARCH
+// =====================
+function setupGlobalSearch() {
+  const searchInput = document.getElementById("search-input");
+  if (!searchInput) return;
+
+  searchInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+      const searchTerm = searchInput.value.trim();
+      if (searchTerm) {
+        // Redireciona para a página de resultado, passando o termo na URL
+        // O encodeURIComponent garante que caracteres especiais sejam tratados
+        window.location.href = `resultado-pesquisa.html?q=${encodeURIComponent(searchTerm)}`;
+      }
+    }
   });
 }

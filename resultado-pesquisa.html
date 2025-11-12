@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Resultado da pesquisa</title>
+    <link
+      rel="icon"
+      type="image/png"
+      href="assets/logos/title_logo_liferay.png"
+    />
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com"
+    />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="css/homepage.css" /> <link rel="stylesheet" href="css/resultado-pesquisa.css" /> </head>
+  <body>
+    <header class="app-header">
+      <div class="logo">
+        <a href="homepage.html">
+          <img
+            src="/assets/logos/logo_liferay_semfundo.png"
+            alt="Logo Liferay"
+          />
+        </a>
+      </div>
+
+      <div class="search-bar">
+        <i class="fas fa-search search-icon"></i>
+        <input
+          type="text"
+          id="search-input"
+          placeholder="Pesquise por habilidades, eventos ou colaboradores"
+        />
+      </div>
+
+      <div class="user-actions">
+        <a href="perfil.html" class="profile-link">
+            <img id="header-profile-pic" src="/assets/icons/profile_placeholder.svg" alt="Foto de Perfil" class="profile-icon">
+            <span id="header-user-name">Carregando...</span>
+        </a>
+        <button id="logout-btn" class="btn-logout" title="Sair"><i class="fas fa-sign-out-alt"></i></button>
+      </div>
+    </header>
+
+    <main class="results-main-content">
+      <h1 class="page-title">
+        Resultado da pesquisa para: "<span id="search-term-display"></span>"
+      </h1>
+
+      <section class="results-section">
+        <div id="loading-spinner" class="loading-spinner" style="display: none;">
+            <i class="fas fa-spinner fa-spin"></i> Carregando...
+        </div>
+        
+        <div id="profiles-results" class="result-category-container" style="display: none;">
+            <h2>Colaboradores (<span id="profile-count">0</span>)</h2>
+            <div id="profiles-list" class="results-grid">
+                </div>
+            <hr>
+        </div>
+
+        <div id="events-results" class="result-category-container" style="display: none;">
+            <h2>Eventos (<span id="event-count">0</span>)</h2>
+            <div id="events-list" class="results-grid">
+                </div>
+        </div>
+
+        <div id="no-results" class="no-results-message" style="display: none;">
+            <p>Nenhum resultado encontrado para o termo pesquisado.</p>
+        </div>
+      </section>
+    </main>
+
+    <script src="js/homepage.js"></script> <script src="js/resultado-pesquisa.js"></script>
+  </body>
+</html>
