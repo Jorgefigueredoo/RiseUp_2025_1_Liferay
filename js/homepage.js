@@ -1,234 +1,166 @@
 // ===============================================
-// URL base do servidor e da API
-const API_URL = "http://localhost:8080/api";
-const SERVER_URL = "http://localhost:8080";
+// ARQUIVO: homepage.js (O "FUNCIONÁRIO")
 // ===============================================
-
-const token = localStorage.getItem("authToken");
-
-if (!token) {
-  alert("Você precisa estar logado para ver esta página.");
-  window.location.href = "login.html";
-}
+//
+// O 'global.js' já cuidou do header, auth e busca.
+// Este arquivo só cuida dos carrosséis da homepage.
+//
 
 document.addEventListener("DOMContentLoaded", () => {
-  carregarDadosUsuario();
-  carregarEventos();
-  setupCarousels();
-  setupLogout();
-  setupGlobalSearch();
+    // A única coisa que a homepage precisa fazer
+    carregarEventos();
+    
+    // O carrossel de cursos já está estático no HTML,
+    // então podemos ligar ele imediatamente.
+    setupCarousels('[data-carousel-id="cursos"]');
 });
 
 // =====================
-// DADOS DO USUÁRIO
-// =====================
-async function carregarDadosUsuario() {
-  const PROFILE_API_URL = `${API_URL}/perfis/me`;
-
-  if (!token) return;
-
-  try {
-    const response = await fetch(PROFILE_API_URL, {
-      method: "GET",
-      headers: { Authorization: "Bearer " + token },
-    });
-
-    if (response.status === 401 || response.status === 403) {
-      console.error("Sessão expirada ao buscar perfil.");
-      return;
-    }
-
-    const perfil = await response.json();
-
-    // ========================================================
-    // CORREÇÃO FEITA AQUI:
-    // Ajustado para usar os IDs do seu HTML.
-    // ========================================================
-    const userImage = document.getElementById("header-profile-pic"); // <-- CORREÇÃO
-    const userNameSpan = document.getElementById("header-profile-name"); // <-- CORREÇÃO
-
-    if (perfil.nomeCompleto && userNameSpan) {
-      userNameSpan.textContent = perfil.nomeCompleto;
-    }
-
-    if (perfil.fotoPerfilUrl && userImage) {
-      userImage.src = SERVER_URL + perfil.fotoPerfilUrl;
-    }
-  } catch (error) {
-    console.error("Erro ao carregar dados do usuário:", error);
-    
-    // Ajustado aqui também para garantir
-    const userNameSpan = document.getElementById("header-profile-name"); // <-- CORREÇÃO
-    if (userNameSpan) {
-      userNameSpan.textContent = "Visitante";
-    }
-  }
-}
-
-// =====================
-// LOGOUT
-// =====================
-function setupLogout() {
-  const logoutButton = document.getElementById("logout-button");
-  if (logoutButton) {
-    logoutButton.addEventListener("click", (e) => {
-      e.preventDefault();
-      localStorage.removeItem("authToken");
-      alert("Você saiu da sua conta.");
-      window.location.href = "login.html";
-    });
-  }
-}
-
-// =====================
-// EVENTOS
+// EVENTOS (ESPECÍFICO DA HOMEPAGE)
 // =====================
 async function carregarEventos() {
-  const eventosURL = `${API_URL}/eventos`;
-  const track = document.querySelector('[data-carousel-id="eventos"] .carousel-track');
+    // 'API_URL' e 'token' vêm do global.js
+    const eventosURL = `${API_URL}/eventos`; 
+    const track = document.querySelector('[data-carousel-id="eventos"] .carousel-track');
 
-  if (!track) return;
-
-  try {
-    const response = await fetch(eventosURL, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
-      },
-    });
-
-    if (response.status === 401 || response.status === 403) {
-      alert("Sua sessão expirou. Faça login novamente.");
-      localStorage.removeItem("authToken");
-      window.location.href = "login.html";
-      return;
+    if (!track) {
+        console.warn('Elemento .carousel-track para [eventos] não encontrado.');
+        return;
     }
 
-    const eventos = await response.json();
-    track.innerHTML = "";
+    try {
+        const response = await fetch(eventosURL, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + token, // Usa a const global
+            },
+        });
 
-    if (eventos.length === 0) {
-      const aviso = document.createElement("p");
-      aviso.textContent = "Nenhum evento disponível no momento.";
-      aviso.style.textAlign = "center";
-      aviso.style.color = "#555";
-      track.appendChild(aviso);
-      return;
-    }
+        if (!response.ok) {
+            // Se falhar (ex: 401), o global.js já vai ter pego
+            // Mas é bom tratar o erro aqui também
+            throw new Error('Falha ao carregar eventos.');
+        }
 
-    eventos.forEach((evento) => {
-      const card = document.createElement("div");
-      card.classList.add("card");
+        const eventos = await response.json();
+        track.innerHTML = ""; // Limpa o "Carregando..."
 
-      const img = document.createElement("img");
-      img.src = "assets/pictures/liferay-devcon.jpg";
-      img.alt = evento.nome || "Evento Liferay";
+        if (eventos.length === 0) {
+            track.innerHTML = '<p style="padding: 0 20px; color: #555;">Nenhum evento disponível no momento.</p>';
+            return;
+        }
 
-      const h3 = document.createElement("h3");
-      const link = document.createElement("a");
-      link.href = `/detalhes-evento.html?id=${evento.id}`;
-      link.textContent = evento.nome || "Evento sem nome";
-      link.style.color = "inherit";
-      link.style.textDecoration = "none";
-      h3.appendChild(link);
+        eventos.forEach((evento) => {
+            const card = document.createElement("div");
+            card.classList.add("card");
 
-      const data = document.createElement("p");
-      if (evento.data) {
-        const dataFormatada = new Date(evento.data).toLocaleDateString("pt-BR", {
-          timeZone: "UTC",
-        });
-        data.textContent = dataFormatada;
-      }
+            const img = document.createElement("img");
+            img.src = "assets/pictures/liferay-devcon.jpg"; // TODO: Usar img do evento
+            img.alt = evento.nome || "Evento Liferay";
 
-      const descricao = document.createElement("p");
-      if (evento.descricao) {
-        descricao.textContent =
-          evento.descricao.substring(0, 100) +
-          (evento.descricao.length > 100 ? "..." : "");
-      }
+            const h3 = document.createElement("h3");
+            const link = document.createElement("a");
+            // ATENÇÃO: Verifique se essa URL de detalhes está correta!
+            link.href = `detalhes-evento.html?id=${evento.id}`; 
+            link.textContent = evento.nome || "Evento sem nome";
+            link.style.color = "inherit";
+            link.style.textDecoration = "none";
+            h3.appendChild(link);
 
-      card.appendChild(img);
-      card.appendChild(h3);
-      card.appendChild(data);
-      card.appendChild(descricao);
+            const data = document.createElement("p");
+            if (evento.data) {
+              const dataFormatada = new Date(evento.data).toLocaleDateString("pt-BR", {
+                timeZone: "UTC", // Importante para datas
+              });
+              data.textContent = dataFormatada;
+            }
 
-      track.appendChild(card);
-    });
+            const descricao = document.createElement("p");
+            if (evento.descricao) {
+              descricao.textContent =
+                evento.descricao.substring(0, 100) +
+                (evento.descricao.length > 100 ? "..." : "");
+            }
 
-    setupCarousels();
-  } catch (error) {
-    console.error("Erro ao carregar eventos:", error);
-    track.innerHTML = `<p style="text-align:center;color:red;">Não foi possível carregar os eventos.</p>`;
-  }
+            card.appendChild(img);
+            card.appendChild(h3);
+            card.appendChild(data);
+            card.appendChild(descricao);
+
+            track.appendChild(card);
+        });
+
+        // Chama o carrossel DEPOIS que os cards de EVENTOS forem criados
+        setupCarousels('[data-carousel-id="eventos"]'); 
+    } catch (error) {
+        console.error("Erro ao carregar eventos:", error);
+        track.innerHTML = `<p style="text-align:center;color:red;">Não foi possível carregar os eventos.</p>`;
+    }
 }
 
 // =====================
-// CARROSSEL
+// CARROSSEL (Lógica genérica de carrossel)
 // =====================
-function setupCarousels() {
-  const carousels = document.querySelectorAll(".carousel");
-
-  carousels.forEach((carousel) => {
-    const track = carousel.querySelector(".carousel-track");
-    const prevButton = carousel.querySelector(".carousel-arrow.prev");
-    const nextButton = carousel.querySelector(".carousel-arrow.next");
-
-    if (!track || !prevButton || !nextButton) return;
-
-    let index = 0;
-    const cards = carousel.querySelectorAll(".card");
-    const totalCards = cards.length;
-    const visibleCards = 3;
-
-    if (totalCards === 0) {
-      prevButton.style.display = "none";
-      nextButton.style.display = "none";
-      return;
+function setupCarousels(selector) {
+    // Pega só o carrossel que foi pedido (eventos ou cursos)
+    const carousel = document.querySelector(selector);
+    if (!carousel) {
+        console.warn(`Carrossel "${selector}" não encontrado.`);
+        return;
     }
 
-    function updateCarousel() {
-      const cardStyle = getComputedStyle(cards[0]);
-      const cardWidth =
-        cards[0].offsetWidth +
-        parseInt(cardStyle.marginRight) +
-        parseInt(cardStyle.marginLeft);
+    const track = carousel.querySelector(".carousel-track");
+    const prevButton = carousel.querySelector(".carousel-arrow.prev");
+    const nextButton = carousel.querySelector(".carousel-arrow.next");
 
-      track.style.transform = `translateX(-${index * cardWidth}px)`;
-      prevButton.disabled = index === 0;
-      nextButton.disabled = index >= totalCards - visibleCards;
+    if (!track || !prevButton || !nextButton) return;
+
+    let index = 0;
+    const cards = carousel.querySelectorAll(".card");
+    const totalCards = cards.length;
+    const visibleCards = 3; // Você pode ajustar isso
+
+    if (totalCards === 0) {
+        prevButton.style.display = "none";
+        nextButton.style.display = "none";
+        return;
+    }
+
+    // Esconde botões se não houver cards suficientes para rolar
+    if (totalCards <= visibleCards) {
+        prevButton.style.display = 'none';
+        nextButton.style.display = 'none';
     }
 
-    prevButton.addEventListener("click", () => {
-      index = Math.max(index - 1, 0);
-      updateCarousel();
-    });
+    function updateCarousel() {
+        if (cards.length === 0) return;
+        const cardStyle = getComputedStyle(cards[0]);
+        const cardWidth =
+          cards[0].offsetWidth +
+          parseInt(cardStyle.marginRight || 0) +
+          parseInt(cardStyle.marginLeft || 0);
+          
+        // A LINHA DO ERRO (const cardWidth: any) FOI APAGADA DAQUI
 
-    nextButton.addEventListener("click", () => {
-      index = Math.min(index + 1, Math.max(0, totalCards - visibleCards));
-      updateCarousel();
-    });
+        if (cardWidth === 0) return; 
 
+        track.style.transform = `translateX(-${index * cardWidth}px)`;
+        prevButton.disabled = index === 0;
+        nextButton.disabled = index >= Math.max(0, totalCards - visibleCards);
+    }
+
+    prevButton.addEventListener('click', () => {
+        index = Math.max(index - 1, 0);
+        updateCarousel();
+    });
+
+    nextButton.addEventListener('click', () => {
+        index = Math.min(index + 1, Math.max(0, totalCards - visibleCards));
+        updateCarousel();
+    });
+
+    // Atualiza na hora e também se a janela mudar de tamanho
     updateCarousel();
-    window.addEventListener("resize", updateCarousel);
-  });
-}
-
-// =====================
-// GLOBAL SEARCH
-// =====================
-function setupGlobalSearch() {
-  const searchInput = document.getElementById("search-input");
-  if (!searchInput) return;
-
-  searchInput.addEventListener("keypress", (e) => {
-    if (e.key === "Enter") {
-      const searchTerm = searchInput.value.trim();
-      if (searchTerm) {
-        // Redireciona para a página de resultado, passando o termo na URL
-        // O encodeURIComponent garante que caracteres especiais sejam tratados
-        window.location.href = `resultado-pesquisa.html?q=${encodeURIComponent(searchTerm)}`;
-      }
-    }
-  });
+    window.addEventListener('resize', updateCarousel);
 }

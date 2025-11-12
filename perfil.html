@@ -1,97 +1,99 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Meu Perfil</title>
-    <link rel="icon" type="image/png" href="assets/logos/title_logo_liferay.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-    <link rel="stylesheet" href="css/perfil.css" />
-</head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Meu Perfil</title>
+    <link rel="icon" type="image/png" href="assets/logos/title_logo_liferay.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="stylesheet" href="css/perfil.css" />
+    </head>
 <body>
-    <header class="app-header">
-        <div class="logo">
-            <a href="homepage.html">
-                <img src="/assets/logos/logo_liferay_semfundo.png" alt="Logo Liferay" />
-            </a>
-        </div>
-        <div class="search-bar">
-            <i class="fas fa-search search-icon"></i>
-            <input type="text" placeholder="Pesquise por habilidades ou colaboradores" />
-        </div>
-        <nav class="user-nav">
-            <button class="button-icon" aria-label="Configurações">
-                <i class="fas fa-cog"></i>
-            </button>
-            <button class="button-icon" aria-label="Notificações" data-notification="true">
-                <i class="fas fa-bell"></i>
-            </button>
-            <div class="user-profile" id="user-profile-header">
-                <img src="/assets/pictures/profile-pic.png" alt="Foto de Perfil" id="header-profile-pic" />
-                <span id="header-profile-name">Carregando...</span>
-            </div>
-        </nav>
-    </header>
+    <header class="app-header">
+        <div class="logo">
+            <a href="homepage.html">
+                <img src="/assets/logos/logo_liferay_semfundo.png" alt="Logo Liferay" />
+            </a>
+        </div>
 
-    <main class="main-content">
-        <header class="profile-header">
-            
-            <div class="profile-picture-container">
-                <img 
-                    src="/assets/pictures/profile-pic.png" 
-                    alt="Foto de Perfil" 
-                    class="profile-picture-large"
-                    id="main-profile-pic" />
-                <label for="file-upload" class="edit-icon" title="Alterar foto">
-                    <i class="fas fa-camera"></i>
-                </label>
-                <input id="file-upload" type="file" accept="image/png, image/jpeg">
-            </div>
-            <div class="profile-info">
-                <input type="text" id="profile-nome" class="profile-nome-input" placeholder="Seu Nome Completo">
-                <input type="text" id="profile-titulo" class="profile-titulo-input" placeholder="Seu Título (ex: Dev Java)">
-            </div>
-        </header>
+                        <div class="search-bar">             <i class="fas fa-search search-icon"></i>
+            <input 
+              type="text" 
+              placeholder="Pesquise por habilidades ou colaboradores"
+              id="search-input" autocomplete="off"
+            />
+            <div id="global-search-results"></div>
+        </div>
+                <nav class="user-nav">
+            <button class="button-icon" aria-label="Configurações">
+                <i class="fas fa-cog"></i>
+            </button>
+            <button class="button-icon" aria-label="Notificações" data-notification="true">
+                <i class="fas fa-bell"></i>
+            </button>
+            <div class="user-profile" id="user-profile-header">
+                <img src="/assets/pictures/profile-pic.png" alt="Foto de Perfil" id="header-profile-pic" />
+                <span id="header-profile-name">Carregando...</span>
+            </div>
+        </nav>
+    </header>
 
-        <div class="profile-grid">
-            
-            <section class="skills-section">
-                <h2>Minhas habilidades</h2>
-                <div class="add-skill-form">
-                    <label for="skill-input">Adicionar nova habilidade:</label>
-                    <div class="input-wrapper">
-                        <input type="text" id="skill-input" placeholder="Ex: Python" />
-                        <button id="add-skill-btn" class="btn-primary">Adicionar</button>
-                    </div>
-                </div>
-                <div class="skills-list" id="skills-list">
-                    </div>
-            </section>
+    <main class="main-content">
+        <header class="profile-header">
+            
+            <div class="profile-picture-container">
+                <img 
+                    src="/assets/pictures/profile-pic.png" 
+                    alt="Foto de Perfil" 
+                    class="profile-picture-large"
+                    id="main-profile-pic" />                 <label for="file-upload" class="edit-icon" title="Alterar foto">
+                    <i class="fas fa-camera"></i>
+                </label>
+                              <input id="file-upload" type="file" accept="image/png, image/jpeg">
+            </div>
+            <div class="profile-info">
+                              <input type="text" id="profile-nome" class="profile-nome-input" placeholder="Seu Nome Completo">
+                <input type="text" id="profile-titulo" class="profile-titulo-input" placeholder="Seu Título (ex: Dev Java)">
+            </div>
+        </header>
 
-            <aside class="about-section">
-                <div class="about-card">
-                    <h3>Sobre mim</h3>
-                    <textarea 
-                        id="profile-sobre" 
-                        rows="8" 
-                        placeholder="Escreva um pouco sobre você..."
-                    ></textarea>
-                </div>
-            </aside>
-        </div>
+        <div class="profile-grid">
+            
+            <section class="skills-section">
+                <h2>Minhas habilidades</h2>
+                <div class="add-skill-form">
+                    <label for="skill-input">Adicionar nova habilidade:</label>
+                    <div class="input-wrapper">
+                                              <input type="text" id="skill-input" placeholder="Ex: Python" />
+                        <button id="add-skill-btn" class="btn-primary">Adicionar</button>
+                    </div>
+                </div>
+                <div class="skills-list" id="skills-list">                                     </div>
+            </section>
 
-        <button class="btn-save" id="save-profile-btn">
-            Salvar Alterações
-        </button>
+            <aside class="about-section">
+                <div class="about-card">
+                    <h3>Sobre mim</h3>
+                    <textarea 
+                        id="profile-sobre"           _B_         rows="8" 
+                        placeholder="Escreva um pouco sobre você..."
+                    ></textarea>
+                </div>
+            </aside>
+        </div>
 
-        <a href="/criar-evento.html" class="btn-float" id="create-event-btn">
-            Criar Evento
-        </a>
-    </main>
+        <button class="btn-save" id="save-profile-btn">             Salvar Alterações
+        </button>
 
-    <script src="js/perfil.js"></script>
+        <a href="/criar-evento.html" class="btn-float" id="create-event-btn">
+            Criar Evento
+        </a>
+    </main>
+
+            <script src="js/global.js"></script>
+        <script src="js/perfil.js"></script>
 </body>
 </html>

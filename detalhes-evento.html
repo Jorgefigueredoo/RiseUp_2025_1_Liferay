@@ -1,97 +1,118 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalhes do Evento - Liferay</title>
-    <link rel="icon" type="image/png" href="assets/logos/title_logo_liferay.png"/>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
-    <link rel="stylesheet" href="css/detalhes-evento.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Evento - Liferay</title>
+    <link rel="icon" type="image/png" href="assets/logos/title_logo_liferay.png"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+    <link rel="stylesheet" href="css/detalhes-evento.css">
+    <!-- Adicione o CSS global se você tiver um para o header/busca -->
+    <!-- <link rel="stylesheet" href="css/global.css"> -->
 </head>
 <body>
-    <header class="app-header">
-        <div class="logo">
-            <a href="homepage.html">
-                <img src="assets/logos/logo_liferay_semfundo.png" alt="Logo Liferay"/>
-            </a>
-        </div>
+    <header class="app-header">
+        <div class="logo">
+            <a href="homepage.html">
+                <img src="assets/logos/logo_liferay_semfundo.png" alt="Logo Liferay"/>
+            </a>
+        </div>
 
-        <div class="search-bar">
-            <i class="fas fa-search search-icon" aria-hidden="true"></i>
-            <input type="text" placeholder="Pesquise por habilidades ou colaboradores" aria-label="Campo de busca"/>
-        </div>
+        <!-- ======================================== -->
+        <!-- BARRA DE BUSCA CORRIGIDA (com IDs) -->
+        <!-- ======================================== -->
+        <div class="search-bar"> <!-- Lembre-se: 'position: relative;' no CSS -->
+            <i class="fas fa-search search-icon" aria-hidden="true"></i>
+            <input 
+                type="text" 
+                placeholder="Pesquise por habilidades ou colaboradores" 
+                aria-label="Campo de busca"
+                id="search-input" <!-- ID ADICIONADO -->
+                autocomplete="off"
+            />
+            <!-- DIV DE RESULTADOS ADICIONADO -->
+            <div id="global-search-results"></div>
+        </div>
 
-        <nav class="user-nav">
-            <button class="button-icon" aria-label="Configurações">
-                <i class="fas fa-cog" aria-hidden="true"></i>
-            </button>
+        <nav class="user-nav">
+            <button class="button-icon" aria-label="Configurações">
+                <i class="fas fa-cog" aria-hidden="true"></i>
+            </button>
 
-            <button class="button-icon" aria-label="Notificações" data-notification="true">
-                <i class="fas fa-bell" aria-hidden="true"></i>
-            </button>
+            <button class="button-icon" aria-label="Notificações" data-notification="true">
+                <i class="fas fa-bell" aria-hidden="true"></i>
+            </button>
 
-            <div class="user-profile">
-                <a href="perfil.html" aria-label="Meu perfil">
-                    <img id="user-avatar" src="assets/pictures/profile-pic.png" alt="Foto de perfil do usuário"/>
-                </a>
-                <span id="user-name">Carregando...</span>
-            </div>
-        </nav>
-    </header>
+            <div class="user-profile">
+                <a href="perfil.html" aria-label="Meu perfil">
+                    <!-- ID PADRONIZADO (Corrigido) -->
+                    <img id="header-profile-pic" src="assets/pictures/profile-pic.png" alt="Foto de perfil do usuário"/>
+                </a>
+                <!-- ID PADRONIZADO (Corrigido) -->
+                <span id="header-profile-name">Carregando...</span>
+            </div>
+        </nav>
+    </header>
 
-    <main class="main-content">
-        <section class="event-container">
+    <main class="main-content">
+        <section class="event-container">
 
-            <div class="event-banner">
-                <img id="eventImage" src="assets/pictures/liferay-devcon.jpg" alt="Banner do Evento">
-            </div>
+            <div class="event-banner">
+                <img id="eventImage" src="assets/pictures/liferay-devcon.jpg" alt="Banner do Evento">
+            </div>
 
-            <div class="event-details">
-                <h1 id="eventName">Carregando...</h1>
+            <div class="event-details">
+                <h1 id="eventName">Carregando...</h1>
 
-                <div class="event-meta">
-                    <p class="meta-item">
-                        <i class="fas fa-calendar-alt"></i>
-                        <span id="eventDate">--/--/----</span>
-                    </p>
-                    <p class="meta-item">
-                        <i class="fas fa-clock"></i>
-                        <span id="eventTime">--:--</span>
-                    </p>
-                    <p class="meta-item">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span id="eventLocation">-</span>
-                    </p>
-                    <p class="meta-item">
-                        <i class="fas fa-tag"></i>
-                        <span id="eventCategory">-</span>
-                    </p>
-                    <p class="meta-item">
-                        <i class="fas fa-users"></i>
-                        <span id="eventVagas">- vagas</span>
-                    </p>
-                </div>
+                <div class="event-meta">
+                    <p class="meta-item">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span id="eventDate">--/--/----</span>
+                    </p>
+                    <p class="meta-item">
+                        <i class="fas fa-clock"></i>
+                        <span id="eventTime">--:--</span>
+                    </p>
+                    <p class="meta-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span id="eventLocation">-</span>
+                    </p>
+                    <p class="meta-item">
+                        <i class="fas fa-tag"></i>
+                        <span id="eventCategory">-</span>
+                    </p>
+                    <p class="meta-item">
+                        <i class="fas fa-users"></i>
+                        <span id="eventVagas">- vagas</span>
+                    </p>
+                </div>
 
-                <article class="event-description">
-                    <h3>Sobre o Evento</h3>
-                    <p id="eventDescription">Carregando descrição...</p>
-                </article>
+                <article class="event-description">
+                    <h3>Sobre o Evento</h3>
+                    <p id="eventDescription">Carregando descrição...</p>
+                </article>
 
-                <div class="action-container">
-                    <button id="inscricaoBtn" class="btn-inscricao" onclick="inscreverEvento()">
-                        <i class="fas fa-check-circle"></i>
-                        <span>Inscrever-se</span>
-                    </button>
-                    <p id="statusMessage" class="status-message" aria-live="polite"></p>
-                </div>
+                <div class="action-container">
+                    <button id="inscricaoBtn" class="btn-inscricao"> 
+                        <!-- O JS vai definir o texto e o clique -->
+                        <span>Carregando...</span>
+                    </button>
+                    <p id="statusMessage" class="status-message" aria-live="polite"></p>
+                </div>
 
-            </div>
-        </section>
-    </main>
+            </div>
+        </section>
+    </main>
 
-    <script src="js/detalhes-evento.js"></script> 
+    <!-- ======================================== -->
+    <!-- SCRIPTS CORRIGIDOS (A CAUSA DO ERRO) -->
+    <!-- ======================================== -->
+    <!-- O "Chefe" (global) VEM PRIMEIRO -->
+    <script src="js/global.js"></script>
+    <!-- O "Funcionário" (específico da página) VEM DEPOIS -->
+    <script src="js/detalhes-evento.js"></script> 
 </body>
 </html>

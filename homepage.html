@@ -1,175 +1,132 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home</title>
-    <link
-      rel="icon"
-      type="image/png"
-      href="assets/logos/title_logo_liferay.png"
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap"
-      rel="stylesheet"
-    />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+    <link
+      rel="icon"
+      type="image/png"
+      href="assets/logos/title_logo_liferay.png"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+        <link rel="stylesheet" href="css/homepage.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="logo">
+        <img src="/assets/logos/logo_liferay_semfundo.png" alt="Logo Liferay" />
+      </div>
 
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-    />
+      <div class="search-bar"> <i class="fas fa-search search-icon"></i>
+        <input
+          type="text"
+          placeholder="Pesquise por habilidades ou colaboradores"
+          id="search-input" autocomplete="off"
+        />
+                <div id="global-search-results"></div>
+      </div>
 
-    <link rel="stylesheet" href="css/homepage.css" />
-  </head>
-  <body>
-    <header class="app-header">
-      <div class="logo">
-        <img src="/assets/logos/logo_liferay_semfundo.png" alt="Logo Liferay" />
-      </div>
-
-      <div class="search-bar">
-        <i class="fas fa-search search-icon"></i>
-        <input
-          type="text"
-          placeholder="Pesquise por habilidades ou colaboradores"
-        />
-      </div>
-
-      <nav class="user-nav">
-        <button class="button-icon" aria-label="Configurações">
-          <i class="fas fa-cog"></i>
-        </button>
-        <button
-          class="button-icon"
-          aria-label="Notificações"
-          data-notification="true"
-        >
-          <i class="fas fa-bell"></i>
-        </button>
-        
-        <div class="user-profile">
-          <a href="/perfil.html">
-            <img 
-              src="/assets/pictures/profile-pic.png" 
-              alt="foto de perfil"
-              id="header-profile-pic" />
+      <nav class="user-nav">
+        <button class="button-icon" aria-label="Configurações">
+          <i class="fas fa-cog"></i>
+        </button>
+        <button
+          class="button-icon"
+          aria-label="Notificações"
+          data-notification="true"
+        >
+          <i class="fas fa-bell"></i>
+        </button>
+        
+        <div class="user-profile">
+          <a href="/perfil.html">
+            <img 
+              src="/assets/pictures/profile-pic.png" 
+              alt="foto de perfil"
+              id="header-profile-pic" />
           </a>
-          <span id="header-profile-name">Carregando...</span> </div>
-        
-      </nav>
-    </header>
-
-    <main class="main-content">
-      <section class="content-section">
-        <h2>Próximos eventos</h2>
-
-        <div class="carousel" data-carousel-id="eventos">
-          <button class="carousel-arrow prev" aria-label="Evento anterior">
-            <i class="fas fa-chevron-left"></i>
-          </button>
-
-          <div class="carousel-viewport">
-            <div class="carousel-track">
-              <div class="card">
-                <img
-                  src="/assets/pictures/liferay-devcon.jpg"
-                  alt="Banner Liferay DEVCON"
-                />
-                <h3>
-                  Treinamento Público: Building 09/09/2025<br />Enterprise
-                  Websites with Liferay
-                </h3>
-              </div>
-              <div class="card">
-                <img
-                  src="/assets/pictures/liferay-devcon.jpg"
-                  alt="Banner Liferay DEVCON"
-                />
-                <h3>
-                  Liferay DEVCON 2025 07/10 Enterprise Websites with Liferay
-                </h3>
-              </div>
-              <div class="card">
-                <img
-                  src="/assets/pictures/liferay-devcon.jpg"
-                  alt="Banner Liferay DEVCON"
-                />
-                <h3>
-                  Gartner Summit 10/10/2025 Enterprise Websites with Liferay
-                </h3>
-              </div>
-              <div class="card">
-                <img
-                  src="/assets/pictures/liferay-devcon.jpg"
-                  alt="Banner Outro Evento"
-                />
-                <h3>Webinar Liferay 12/11/2025 Novas Features</h3>
-              </div>
-            </div>
-          </div>
-
-          <button class="carousel-arrow next" aria-label="Próximo evento">
-            <i class="fas fa-chevron-right"></i>
-          </button>
+          <span id="header-profile-name">Carregando...</span> 
         </div>
+      </nav>
+    </header>
 
-        <div class="carousel-pagination">
+            <main class="main-content">
+      <section class="content-section">
+        <h2>Próximos eventos</h2>
+
+        <div class="carousel" data-carousel-id="eventos">
+          <button class="carousel-arrow prev" aria-label="Evento anterior">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+
+          <div class="carousel-viewport">
+            <div class="carousel-track">
+              <div class="card">
+                <h3>Carregando eventos...</h3>
+              </div>
           </div>
-      </section>
+          </div>
 
-      <section class="content-section">
-        <h2>Cursos Disponíveis</h2>
+          <button class="carousel-arrow next" aria-label="Próximo evento">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
 
-        <div class="carousel" data-carousel-id="cursos">
-          <button class="carousel-arrow prev" aria-label="Curso anterior">
-            <i class="fas fa-chevron-left"></i>
-          </button>
+        <div class="carousel-pagination">
+          </div>
+      </section>
 
-          <div class="carousel-viewport">
-            <div class="carousel-track">
-              <div class="card">
-                <img
-                  src="/assets/pictures/liferay-devcon.jpg"
-                  alt="Banner Curso Liferay"
-                />
-                <h3>Curso de Desenvolvimento de Portais com Liferay</h3>
-              </div>
-              <div class="card">
-                <img
-                  src="/assets/pictures/liferay-devcon.jpg"
-                  alt="Banner Curso Liferay"
-                />
-                <h3>Liferay DXP: Administração e Configuração Avançada</h3>
-              </div>
-              <div class="card">
-                <img
-                  src="/assets/pictures/liferay-devcon.jpg"
-                  alt="Banner Curso Liferay"
-                />
-                <h3>Introdução ao Liferay Commerce para Desenvolvedores</h3>
-              </div>
-              <div class="card">
-                <img
-                  src="/assets/pictures/liferay-devcon.jpg"
-                  alt="Banner Curso Liferay"
-                />
-                <h3>Curso Avançado de Temas Liferay</h3>
-              </div>
-            </div>
-          </div>
+      <section class="content-section">
+        <h2>Cursos Disponíveis</h2>
 
-          <button class="carousel-arrow next" aria-label="Próximo curso">
-            <i class="fas fa-chevron-right"></i>
-          </button>
-        </div>
+        <div class="carousel" data-carousel-id="cursos">
+          <button class="carousel-arrow prev" aria-label="Curso anterior">
+            <i class="fas fa-chevron-left"></i>
+          </button>
 
-        <div class="carousel-pagination">
-          </div>
-      </section>
-    </main>
+          <div class="carousel-viewport">
+            <div class="carousel-track">
+                            <div class="card">
+                <img
+                  src="/assets/pictures/liferay-devcon.jpg"
+                  alt="Banner Curso Liferay"
+                />
+                <h3>Curso de Desenvolvimento de Portais com Liferay</h3>
+              </div>
+              <div class="card">
+                <img
+                  src="/assets/pictures/liferay-devcon.jpg"
+                  alt="Banner Curso Liferay"
+                />
+                <h3>Liferay DXP: Administração e Configuração Avançada</h3>
+              </div>
+              <div class="card">
+                <img
+                  src="/assets/pictures/liferay-devcon.jpg"
+                  alt="Banner Curso Liferay"
+                />
+                <h3>Introdução ao Liferay Commerce para Desenvolvedores</h3>
+              </div>
+            </div>
+          </div>
 
-    <script src="js/homepage.js"></script>
-    <script src="js/perfil.js"></script> </body>
+          <button class="carousel-arrow next" aria-label="Próximo curso">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </section>
+    </main>
+            <script src="js/global.js"></script>
+    <script src="js/homepage.js"></script>
+  </body>
 </html>

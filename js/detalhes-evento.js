@@ -1,89 +1,29 @@
 // ===============================================
-// URLs do Servidor (Certifique-se de que estão corretas)
+// ARQUIVO: detalhes-evento.js (MAGRO E FOCADO)
 // ===============================================
-const API_URL = "http://localhost:8080/api"; 
-const SERVER_URL = "http://localhost:8080"; 
+//
+// NOTA:
+// O 'global.js' já cuidou de:
+// 1. API_URL, SERVER_URL, token
+// 2. carregarDadosUsuario()
+// 3. setupGlobalSearch()
+//
 
-// =====================
-// 1. VERIFICAÇÃO DE SEGURANÇA (ROTA PROTEGIDA)
-// =====================
-const token = localStorage.getItem("authToken");
-if (!token) {
-    alert("Você precisa estar logado para ver os detalhes de um evento.");
-    window.location.href = "login.html";
-}
-
-// Variável global para armazenar dados do evento
+// Variável global APENAS para esta página
 let eventoAtual = null;
 
-// =====================
-// FUNÇÃO PARA CARREGAR OS DADOS DO USUÁRIO
-// =====================
-async function carregarDadosUsuario() {
-    const PROFILE_API_URL = `${API_URL}/perfis/me`; 
-
-    if (!token) return;
-
-    try {
-        const response = await fetch(PROFILE_API_URL, {
-            method: 'GET',
-            headers: { 'Authorization': 'Bearer ' + token }
-        });
-
-        if (response.status === 401 || response.status === 403) {
-             console.error("Sessão expirada ao buscar perfil.");
-             return;
-        }
-
-        if (!response.ok) {
-            throw new Error('Falha ao carregar perfil.');
-        }
-
-        const perfil = await response.json();
-
-        // 1. Popula a foto e nome do perfil no header
-        const userImage = document.getElementById("user-avatar");
-        const userNameSpan = document.getElementById("user-name");
-
-        if (perfil.nomeCompleto && userNameSpan) {
-            // Usa o primeiro nome ou o nome completo
-            userNameSpan.textContent = perfil.nomeCompleto.split(" ")[0] || perfil.nomeCompleto; 
-        } else {
-             userNameSpan.textContent = "Visitante";
-        }
-
-        // 2. Popula a foto (usando a URL COMPLETA do servidor)
-        if (perfil.fotoPerfilUrl && userImage) {
-            // Adicionando cache buster para garantir que a foto mais recente apareça
-            const cacheBuster = `?t=${new Date().getTime()}`;
-            const urlCompleta = SERVER_URL + perfil.fotoPerfilUrl + cacheBuster; 
-            userImage.src = urlCompleta;
-        }
-
-    } catch (error) {
-        console.error('Erro ao carregar dados do usuário:', error);
-    }
-}
-
-
-// =====================
-// INICIALIZAÇÃO
-// =====================
+// "Liga" as funções específicas desta página
 document.addEventListener('DOMContentLoaded', function () {
-    // CHAMA A FUNÇÃO DE PERFIL AQUI
-    carregarDadosUsuario(); 
-
-    if (typeof setupGlobalSearch === 'function') {
-        setupGlobalSearch();
-    }
-    
+    // O 'global.js' já rodou seu próprio DOMContentLoaded
+    // para o header. Este é só para a página de detalhes.
+    
     const urlParams = new URLSearchParams(window.location.search);
     const eventoId = urlParams.get('id');
 
     if (eventoId) {
         carregarDetalhesEvento(eventoId);
     } else {
-        mostrarErro('Evento não encontrado.');
+        mostrarErro('ID do evento não fornecido.');
     }
 });
 
@@ -92,11 +32,10 @@ document.addEventListener('DOMContentLoaded', function () {
 // =====================
 async function carregarDetalhesEvento(eventoId) {
     try {
-        const response = await fetch(`http://localhost:8080/api/eventos/${eventoId}`, {
+        // 'API_URL' e 'token' vêm do global.js
+        const response = await fetch(`${API_URL}/eventos/${eventoId}`, {
             method: 'GET',
-            headers: {
-                "Authorization": "Bearer " + token
-            }
+            headers: { "Authorization": "Bearer " + token }
         });
 
         if (response.status === 401 || response.status === 403) {
@@ -110,6 +49,7 @@ async function carregarDetalhesEvento(eventoId) {
         eventoAtual = await response.json();
         preencherDetalhesEvento(eventoAtual);
         
+        // Chama o próximo fetch
         verificarStatusInscricao(eventoId); 
     } catch (erro) {
         console.error('Erro ao carregar evento:', erro);
@@ -122,19 +62,10 @@ async function carregarDetalhesEvento(eventoId) {
 // =====================
 async function verificarStatusInscricao(eventoId) {
     try {
-        const response = await fetch(`http://localhost:8080/api/eventos/${eventoId}/status`, {
+        const response = await fetch(`${API_URL}/eventos/${eventoId}/status`, {
             method: 'GET',
-            headers: {
-                "Authorization": "Bearer " + token
-            }
+            headers: { "Authorization": "Bearer " + token }
         });
-
-        if (response.status === 401 || response.status === 403) {
-            alert("Sua sessão expirou (check status). Faça login novamente.");
-            localStorage.removeItem("authToken");
-            window.location.href = "login.html";
-            return;
-        }
 
         if (response.ok) {
             const status = await response.json();
@@ -157,7 +88,7 @@ async function inscreverEvento() {
         const urlParams = new URLSearchParams(window.location.search);
         const eventoId = urlParams.get('id');
 
-        const response = await fetch(`http://localhost:8080/api/eventos/${eventoId}/inscrever`, {
+        const response = await fetch(`${API_URL}/eventos/${eventoId}/inscrever`, {
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json',
@@ -165,18 +96,11 @@ async function inscreverEvento() {
             },
         });
         
-         if (response.status === 401 || response.status === 403) {
-             alert("Sua sessão expirou (inscrição). Faça login novamente.");
-             localStorage.removeItem("authToken");
-             window.location.href = "login.html";
-             return;
-         }
-         
         if (!response.ok) {
              const resultadoErro = await response.json();
              throw new Error(resultadoErro.erro || 'Erro desconhecido');
         }
-         
+        
         mostrarConfirmacaoInscricao(eventoAtual);
         
     } catch (erro) {
@@ -188,7 +112,7 @@ async function inscreverEvento() {
 
 
 // =====================
-// FUNÇÕES AUXILIARES
+// FUNÇÕES AUXILIARES (Helpers)
 // =====================
 
 function preencherDetalhesEvento(evento) {
@@ -197,19 +121,12 @@ function preencherDetalhesEvento(evento) {
     document.getElementById('eventDate').textContent = formatarData(evento.data);
     document.getElementById('eventTime').textContent = evento.hora.substring(0, 5);
     document.getElementById('eventLocation').textContent = evento.local;
+    document.getElementById('eventCategory').textContent = evento.categoria || '-';
     
-    const categoryElement = document.getElementById('eventCategory');
-    if (categoryElement) {
-        categoryElement.textContent = evento.categoria || '-';
-    }
-
     const vagasElement = document.getElementById('eventVagas');
     if (vagasElement) {
         const vagas = evento.vagas; 
-        const textoVagas = (vagas !== undefined && vagas !== null && vagas >= 0)
-            ? `${vagas} vagas` 
-            : '- vagas';
-        vagasElement.textContent = textoVagas;
+        vagasElement.textContent = (vagas !== undefined && vagas >= 0) ? `${vagas} vagas` : '- vagas';
     }
 }
 
@@ -217,17 +134,26 @@ function atualizarBotaoInscricao(status) {
     const btn = document.getElementById('inscricaoBtn');
     const msg = document.getElementById('statusMessage');
 
+  	// Pega o span dentro do botão (se existir)
+	const btnText = btn.querySelector('span');
+	const textTarget = btnText || btn; // Altera o span ou o próprio botão
+
     if (status.jaInscrito) {
-        btn.textContent = 'Já Inscrito';
+        textTarget.textContent = 'Já Inscrito';
         btn.disabled = true;
         msg.textContent = 'Você já está inscrito neste evento.';
     } else if (status.esgotado) {
-        btn.textContent = 'Vagas Esgotadas';
+        textTarget.textContent = 'Vagas Esgotadas';
         btn.disabled = true;
         msg.textContent = 'Vagas esgotadas.';
     } else {
-        btn.textContent = 'Inscrever-se';
+        textTarget.textContent = 'Inscrever-se';
         btn.disabled = false;
+        // Remove o 'onclick' do HTML e adiciona o listener de forma segura
+        if(btn.hasAttribute('onclick')) {
+            btn.removeAttribute('onclick');
+        }
+        btn.addEventListener('click', inscreverEvento); 
         msg.textContent = '';
     }
 }
@@ -239,7 +165,6 @@ function mostrarConfirmacaoInscricao(evento) {
         eventoHora: evento.hora.substring(0, 5),
         eventoLocal: evento.local
     }));
-
     window.location.href = 'inscricao-confirmacao.html';
 }
 
@@ -253,7 +178,6 @@ function formatarData(data) {
 function mostrarErro(mensagem) {
     document.getElementById('eventName').textContent = 'Erro';
     document.getElementById('eventDescription').textContent = mensagem;
-    
     const btn = document.getElementById('inscricaoBtn');
     if (btn) btn.style.display = 'none';
 }
