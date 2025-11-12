@@ -17,7 +17,7 @@ if (!token) {
 let eventoAtual = null;
 
 // =====================
-// FUNÇÃO PARA CARREGAR OS DADOS DO USUÁRIO (NOVA)
+// FUNÇÃO PARA CARREGAR OS DADOS DO USUÁRIO
 // =====================
 async function carregarDadosUsuario() {
     const PROFILE_API_URL = `${API_URL}/perfis/me`; 
@@ -72,6 +72,10 @@ async function carregarDadosUsuario() {
 document.addEventListener('DOMContentLoaded', function () {
     // CHAMA A FUNÇÃO DE PERFIL AQUI
     carregarDadosUsuario(); 
+
+    if (typeof setupGlobalSearch === 'function') {
+        setupGlobalSearch();
+    }
     
     const urlParams = new URLSearchParams(window.location.search);
     const eventoId = urlParams.get('id');

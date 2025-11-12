@@ -267,11 +267,29 @@ async function saveProfile() {
     }
 }
 
+function setupGlobalSearch() {
+  const searchInput = document.getElementById("search-input");
+  if (!searchInput) return;
+
+  searchInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+      const searchTerm = searchInput.value.trim();
+      if (searchTerm) {
+        window.location.href = `resultado-pesquisa.html?q=${encodeURIComponent(searchTerm)}`;
+      }
+    }
+  });
+}
+
 // --- Eventos ---
 window.addEventListener("DOMContentLoaded", () => {
     loadProfile();
     setupPhotoPreview(); 
 
+    if (typeof setupGlobalSearch === 'function') {
+        setupGlobalSearch();
+    }
+    
     const addSkillBtn = document.getElementById("add-skill-btn");
     const skillInput = document.getElementById("skill-input");
     const saveBtn = document.getElementById("save-profile-btn");
