@@ -1,473 +1,529 @@
 /* --- Reset Básico e Padrões Globais --- */
 :root {
-    --cor-principal: #00318f;
-    --cor-texto-navegacao: #a1a2af;
-    --cor-texto-claro: #bdbdc7;
-    --cor-texto: #333;
-    --cor-fundo-claro: #f4f4f6;
-    --cor-fundo-icone: #f5f7fa;
-    --cor-borda: #eaeaea;
-    --cor-branco: #ffffff;
-    --cor-notificacao: #fa0000;
+  --cor-principal: #00318f;
+  --cor-texto-navegacao: #a1a2af;
+  --cor-texto-claro: #bdbdc7;
+  --cor-texto: #333;
+  --cor-fundo-claro: #f4f4f6;
+  --cor-fundo-icone: #f5f7fa;
+  --cor-borda: #eaeaea;
+  --cor-branco: #ffffff;
+  --cor-notificacao: #fa0000;
 }
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: "Source Sans Pro", sans-serif;
-    background-color: var(--cor-branco);
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+  font-family: "Source Sans Pro", sans-serif;
+  background-color: var(--cor-branco);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 /* --- HEADER --- */
 .app-header {
-    grid-column: 1 / -1;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px 30px;
-    border-bottom: 1px solid var(--cor-borda);
-    background: var(--cor-branco);
-    z-index: 100;
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 30px;
+  border-bottom: 1px solid var(--cor-borda);
+  background: var(--cor-branco);
+  z-index: 100;
 }
 
 .logo img {
-    height: 35px;
+  height: 35px;
 }
 
 .search-bar {
-    position: relative;
-    flex-grow: 1;
-    max-width: 700px;
-    margin: 0 30px;
+  position: relative;
+  flex-grow: 1;
+  max-width: 700px;
+  margin: 0 30px;
 }
 
 .search-bar .search-icon {
-    position: absolute;
-    left: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--cor-texto-claro);
-    font-size: 18px;
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--cor-texto-claro);
+  font-size: 18px;
 }
 
 .search-bar input {
-    width: 100%;
-    padding: 12px 20px 12px 50px;
-    border: none;
-    border-radius: 40px;
-    background: var(--cor-fundo-claro);
-    font-size: 16px;
-    color: var(--cor-texto-claro);
+  width: 100%;
+  padding: 12px 20px 12px 50px;
+  border: none;
+  border-radius: 40px;
+  background: var(--cor-fundo-claro);
+  font-size: 16px;
+  color: var(--cor-texto-claro);
 }
 
 .user-nav {
-    display: flex;
-    align-items: center;
-    gap: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .button-icon {
-    background: var(--cor-fundo-icone);
-    border: none;
-    border-radius: 50%;
-    width: 44px;
-    height: 44px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 18px;
-    color: var(--cor-principal);
-    cursor: pointer;
-    position: relative;
+  background: var(--cor-fundo-icone);
+  border: none;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  color: var(--cor-principal);
+  cursor: pointer;
+  position: relative;
 }
 
 .button-icon[data-notification="true"]::after {
-    content: "";
-    width: 8px;
-    height: 8px;
-    background-color: var(--cor-notificacao);
-    border-radius: 50%;
-    position: absolute;
-    top: 10px;
-    right: 12px;
+  content: "";
+  width: 8px;
+  height: 8px;
+  background-color: var(--cor-notificacao);
+  border-radius: 50%;
+  position: absolute;
+  top: 10px;
+  right: 12px;
 }
 
 .user-profile {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .user-profile img {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    object-fit: cover;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .user-profile span {
-    font-weight: 600;
-    font-size: 16px;
-    color: var(--cor-texto);
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--cor-texto);
 }
 
 /* --- CONTEÚDO PRINCIPAL --- */
 .main-content {
-    grid-column: 2 / 3;
-    grid-row: 2;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 40px;
-    background-color: #fafafb;
-    min-height: calc(100vh - 72px);
+  grid-column: 2 / 3;
+  grid-row: 2;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 40px;
+  background-color: #fafafb;
+  min-height: calc(100vh - 72px);
 }
 
 /* Cabeçalho do Perfil */
 .profile-header {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 20px;
-    width: 100%;
-    max-width: 1100px;
-    margin-bottom: 40px;
-    text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 20px;
+  width: 100%;
+  max-width: 1100px;
+  margin-bottom: 40px;
+  text-align: left;
 }
 
 /* Container para a foto de perfil (para posicionar o ícone) */
 .profile-picture-container {
-    position: relative;
-    /* Adapta-se ao tamanho da imagem filha */
-    display: inline-block;
+  position: relative;
+  /* Adapta-se ao tamanho da imagem filha */
+  display: inline-block;
 }
 
 /* Esconde o input de arquivo real */
 #file-upload {
-    display: none;
+  display: none;
 }
 
 /* Estilo do ícone de edição (a <label>) */
 .edit-icon {
-    position: absolute;
-    bottom: 5px; /* Posição sobre a foto */
-    right: 5px; /* Posição sobre a foto */
+  position: absolute;
+  bottom: 5px; /* Posição sobre a foto */
+  right: 5px; /* Posição sobre a foto */
 
-    background-color: var(--cor-branco);
-    color: var(--cor-principal);
-    font-size: 14px;
-    padding: 8px 10px;
-    border-radius: 50%;
-    cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    transition: all 0.2s ease;
-    border: 1px solid var(--cor-borda);
+  background-color: var(--cor-branco);
+  color: var(--cor-principal);
+  font-size: 14px;
+  padding: 8px 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+  border: 1px solid var(--cor-borda);
 }
 
 .edit-icon:hover {
-    background-color: var(--cor-fundo-claro);
-    transform: scale(1.1);
+  background-color: var(--cor-fundo-claro);
+  transform: scale(1.1);
 }
 
 .profile-picture-large {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 4px solid var(--cor-branco);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--cor-branco);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 /* Estiliza os inputs de nome e título para parecerem texto */
 .profile-info .profile-nome-input,
 .profile-info .profile-titulo-input {
-    border: none;
-    background: none;
-    padding: 0;
-    margin: 0;
-    width: 100%;
-    font-family: inherit; /* Garante a mesma fonte */
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  font-family: inherit; /* Garante a mesma fonte */
 }
 
 .profile-info .profile-nome-input {
-    font-size: 28px; /* Mesmo tamanho do H1 original */
-    font-weight: 700;
-    color: var(--cor-texto);
+  font-size: 28px; /* Mesmo tamanho do H1 original */
+  font-weight: 700;
+  color: var(--cor-texto);
 }
 
 .profile-info .profile-titulo-input {
-    font-size: 16px; /* Mesmo tamanho do P original */
-    color: var(--cor-texto-claro); /* Mesmo cor do P original */
-    margin-top: 5px;
+  font-size: 16px; /* Mesmo tamanho do P original */
+  color: var(--cor-texto-claro); /* Mesmo cor do P original */
+  margin-top: 5px;
 }
 
 /* Foco sutil para mostrar que é editável */
 .profile-info .profile-nome-input:focus,
 .profile-info .profile-titulo-input:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(0, 49, 143, 0.1); /* Usa a cor principal */
-    border-radius: 4px;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 49, 143, 0.1); /* Usa a cor principal */
+  border-radius: 4px;
 }
 
 /* Grid do Perfil */
 .profile-grid {
-    width: 100%;
-    max-width: 1100px;
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 30px;
-    align-items: start;
+  width: 100%;
+  max-width: 1100px;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 15px;
+  align-items: start;
+}
+
+/* Wrapper para coluna principal (habilidades + eventos) */
+.main-column {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 /* Seção de Habilidades */
 .skills-section {
-    background: var(--cor-branco);
-    padding: 30px;
-    border-radius: 8px;
-    border: 1px solid var(--cor-borda);
-    text-align: left;
+  background: var(--cor-branco);
+  padding: 30px;
+  border-radius: 8px;
+  border: 1px solid var(--cor-borda);
+  text-align: left;
 }
 
-.skills-section h2 {
-    font-size: 24px;
-    font-weight: 600;
-    color: var(--cor-principal);
-    margin-bottom: 25px;
+/* Seção de Eventos */
+.events-section {
+  background: var(--cor-branco);
+  padding: 30px;
+  border-radius: 8px;
+  border: 1px solid var(--cor-borda);
+  text-align: left;
+}
+
+.skills-section h2,
+.events-section h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--cor-principal);
+  margin-bottom: 25px;
 }
 
 .add-skill-form label {
-    display: block;
-    font-weight: 600;
-    color: var(--cor-texto);
-    margin-bottom: 10px;
+  display: block;
+  font-weight: 600;
+  color: var(--cor-texto);
+  margin-bottom: 10px;
 }
 
 .add-skill-form .input-wrapper {
-    display: flex;
-    gap: 10px;
+  display: flex;
+  gap: 10px;
 }
 
 .add-skill-form input {
-    flex-grow: 1;
-    padding: 12px 20px;
-    border: 1px solid var(--cor-borda);
-    border-radius: 50px;
-    font-size: 16px;
+  flex-grow: 1;
+  padding: 12px 20px;
+  border: 1px solid var(--cor-borda);
+  border-radius: 50px;
+  font-size: 16px;
 }
 
 .add-skill-form input:focus {
-    outline: none;
-    border-color: var(--cor-principal);
-    box-shadow: 0 0 0 3px rgba(0, 49, 143, 0.1);
+  outline: none;
+  border-color: var(--cor-principal);
+  box-shadow: 0 0 0 3px rgba(0, 49, 143, 0.1);
 }
 
 /* Botão */
 .btn-primary {
-    padding: 12px 24px;
-    border: none;
-    border-radius: 50px;
-    background-color: var(--cor-principal);
-    color: var(--cor-branco);
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 50px;
+  background-color: var(--cor-principal);
+  color: var(--cor-branco);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .btn-primary:hover {
-    background-color: #00256e;
+  background-color: #00256e;
 }
 
 /* Lista de Habilidades */
 .skills-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    margin-top: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 30px;
 }
 
 .skill-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
 
 .skill-pill {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    background-color: var(--cor-branco);
-    border: 1px solid var(--cor-borda);
-    border-radius: 50px;
-    padding: 12px 24px;
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--cor-texto);
-    min-width: 150px;
-    text-align: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background-color: var(--cor-branco);
+  border: 1px solid var(--cor-borda);
+  border-radius: 50px;
+  padding: 12px 24px;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--cor-texto);
+  min-width: 150px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .skill-pill:hover {
-    transform: translateY(-3px);
-    border-color: var(--cor-principal);
-    box-shadow: 0 6px 14px rgba(0, 49, 143, 0.15);
-    background-color: #f8faff;
-    color: var(--cor-principal);
-    cursor: default;
-    transition: all 0.3s ease;
+  transform: translateY(-3px);
+  border-color: var(--cor-principal);
+  box-shadow: 0 6px 14px rgba(0, 49, 143, 0.15);
+  background-color: #f8faff;
+  color: var(--cor-principal);
+  cursor: default;
+  transition: all 0.3s ease;
 }
 
 .skill-pill i {
-    font-size: 24px;
+  font-size: 24px;
 }
 
 .skill-pill .fa-react {
-    color: #61dafb;
+  color: #61dafb;
 }
 .skill-pill .fa-js-square {
-    color: #f7df1e;
-    background: #000;
-    border-radius: 4px;
+  color: #f7df1e;
+  background: #000;
+  border-radius: 4px;
 }
 
 /* Botão de Excluir */
 .delete-skill-btn {
-    background: none;
-    border: none;
-    color: var(--cor-texto-navegacao);
-    font-size: 18px;
-    cursor: pointer;
-    transition: color 0.3s ease;
+  background: none;
+  border: none;
+  color: var(--cor-texto-navegacao);
+  font-size: 18px;
+  cursor: pointer;
+  transition: color 0.3s ease;
 }
 
 .delete-skill-btn:hover {
-    color: var(--cor-notificacao);
+  color: var(--cor-notificacao);
 }
+
+/* Lista de Eventos */
+.events-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Card de Evento */
+.event-card {
+  background: var(--cor-fundo-claro);
+  padding: 20px 25px;
+  border-radius: 10px;
+  border: 1px solid var(--cor-borda);
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.event-card:hover {
+  border-color: var(--cor-principal);
+  box-shadow: 0 4px 10px rgba(0, 49, 143, 0.1);
+}
+
+.event-card p {
+  font-size: 16px;
+  color: var(--cor-texto);
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.event-card p:last-child {
+  margin-bottom: 0;
+}
+
+.event-card strong {
+  color: var(--cor-principal);
+  font-weight: 600;
+}
+
 
 /* Seção "Sobre Mim" */
 .about-section .about-card {
-    background: var(--cor-branco);
-    border: 1px solid var(--cor-borda);
-    border-radius: 8px;
-    padding: 24px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
-    text-align: left;
+  background: var(--cor-branco);
+  border: 1px solid var(--cor-borda);
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+  text-align: left;
 }
 
 .about-card h3 {
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--cor-principal);
-    margin-bottom: 15px;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--cor-principal);
+  margin-bottom: 15px;
 }
 
 /* Estiliza a textarea "Sobre Mim" */
 .about-card textarea {
-    font-size: 16px;
-    line-height: 1.6;
-    color: var(--cor-texto);
-    font-family: inherit;
-    width: 100%;
-    min-height: 120px; /* Tamanho inicial */
-    padding: 1rem;
-    border: 1px solid var(--cor-borda);
-    border-radius: 8px;
-    resize: vertical; /* Permite ao usuário redimensionar verticalmente */
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--cor-texto);
+  font-family: inherit;
+  width: 100%;
+  min-height: 120px; /* Tamanho inicial */
+  padding: 1rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: 8px;
+  resize: vertical; /* Permite ao usuário redimensionar verticalmente */
 }
 
 .about-card textarea:focus {
-    outline: none;
-    border-color: var(--cor-principal);
-    box-shadow: 0 0 0 3px rgba(0, 49, 143, 0.1);
+  outline: none;
+  border-color: var(--cor-principal);
+  box-shadow: 0 0 0 3px rgba(0, 49, 143, 0.1);
 }
 
 /* Estilo para o botão "Salvar Alterações" */
 .btn-save {
-    display: block;
-    width: 100%;
-    max-width: 250px;
-    margin: 40px auto 0 auto; /* Centralizado com espaço acima */
-    
-    /* Reutiliza o estilo do .btn-primary */
-    padding: 12px 24px;
-    border: none;
-    border-radius: 50px;
-    background-color: var(--cor-principal);
-    color: var(--cor-branco);
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  display: block;
+  width: 100%;
+  max-width: 250px;
+  margin: 40px auto 0 auto; /* Centralizado com espaço acima */
+
+  /* Reutiliza o estilo do .btn-primary */
+  padding: 12px 24px;
+  border: none;
+  border-radius: 50px;
+  background-color: var(--cor-principal);
+  color: var(--cor-branco);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .btn-save:hover {
-    background-color: #00256e;
+  background-color: #00256e;
 }
 
 .btn-save:disabled {
-    background-color: #a0a0a0;
-    cursor: not-allowed;
+  background-color: #a0a0a0;
+  cursor: not-allowed;
 }
 
 /* Botão Flutuante */
 .btn-float {
-    position: fixed;
-    bottom: 40px;
-    right: 40px;
-    background-color: var(--cor-principal);
-    color: var(--cor-branco);
-    border: none;
-    border-radius: 50px;
-    padding: 14px 28px;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0, 49, 143, 0.3);
-    transition: all 0.3s ease;
-    text-decoration: none;
-    z-index: 200;
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  background-color: var(--cor-principal);
+  color: var(--cor-branco);
+  border: none;
+  border-radius: 50px;
+  padding: 14px 28px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 49, 143, 0.3);
+  transition: all 0.3s ease;
+  text-decoration: none;
+  z-index: 200;
 }
 
 .btn-float:hover {
-    background-color: #00256e;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0, 49, 143, 0.3);
+  background-color: #00256e;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 49, 143, 0.3);
 }
 
 /* --- RESPONSIVIDADE --- */
 /* ESTA É A FORMA CORRETA DE USAR O @media - NO FIM DO ARQUIVO */
 @media (max-width: 900px) {
-    body {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto auto 1fr;
-    }
+  body {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr;
+  }
 
-    .main-content {
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-    }
+  .main-content {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
 
-    .profile-grid {
-        grid-template-columns: 1fr;
-        max-width: 700px;
-    }
+  .profile-grid {
+    grid-template-columns: 1fr;
+    max-width: 700px;
+  }
 
-    .btn-float {
-        bottom: 20px;
-        right: 20px;
-    }
+  .btn-float {
+    bottom: 20px;
+    right: 20px;
+  }
 }
