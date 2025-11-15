@@ -165,7 +165,7 @@ body {
 /* --- BOTÕES (ARROWS) DO CARROSSEL --- */
 .carousel-arrow {
   position: absolute;
-  top: 50%;
+  top: 118px;
   transform: translateY(-50%);
   background: var(--cor-fundo-icone);
   border: none;

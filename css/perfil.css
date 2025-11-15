@@ -19,15 +19,27 @@
 
 body {
   font-family: "Source Sans Pro", sans-serif;
+<<<<<<< HEAD
+  background-color: var(--cor-branco);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+=======
   background-color: #fafafb;
   height: 100vh;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+>>>>>>> e583fc70d4f09ebf52234f5ffc70b134c6e9d7b5
 }
 
 /* --- HEADER (Sem alterações, é global) --- */
 .app-header {
+<<<<<<< HEAD
+  grid-column: 1 / -1;
+=======
+>>>>>>> e583fc70d4f09ebf52234f5ffc70b134c6e9d7b5
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -65,6 +77,8 @@ body {
   background: var(--cor-fundo-claro);
   font-size: 16px;
   color: var(--cor-texto-claro);
+<<<<<<< HEAD
+=======
 }
 
 /* Dropdown de busca */
@@ -104,6 +118,7 @@ body {
   display: block;
   font-size: 0.8em;
   color: #555;
+>>>>>>> e583fc70d4f09ebf52234f5ffc70b134c6e9d7b5
 }
 
 .user-nav {
@@ -159,6 +174,11 @@ body {
 
 /* --- CONTEÚDO PRINCIPAL --- */
 .main-content {
+<<<<<<< HEAD
+  grid-column: 2 / 3;
+  grid-row: 2;
+=======
+>>>>>>> e583fc70d4f09ebf52234f5ffc70b134c6e9d7b5
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -166,12 +186,25 @@ body {
   justify-content: flex-start;
   padding: 40px;
   background-color: #fafafb;
+<<<<<<< HEAD
+  min-height: calc(100vh - 72px);
+=======
   min-height: calc(100vh - 89px);
+>>>>>>> e583fc70d4f09ebf52234f5ffc70b134c6e9d7b5
 }
 
 /* Cabeçalho do Perfil */
 .profile-header {
   display: flex;
+<<<<<<< HEAD
+  align-items: center;
+  justify-content: flex-start;
+  gap: 20px;
+  width: 100%;
+  max-width: 1100px;
+  margin-bottom: 40px;
+  text-align: left;
+=======
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -180,10 +213,15 @@ body {
   max-width: 1100px;
   margin-bottom: 40px;
   text-align: center;
+>>>>>>> e583fc70d4f09ebf52234f5ffc70b134c6e9d7b5
 }
 
 .profile-picture-container {
   position: relative;
+<<<<<<< HEAD
+  /* Adapta-se ao tamanho da imagem filha */
+=======
+>>>>>>> e583fc70d4f09ebf52234f5ffc70b134c6e9d7b5
   display: inline-block;
 }
 
@@ -193,8 +231,14 @@ body {
 
 .edit-icon {
   position: absolute;
+<<<<<<< HEAD
+  bottom: 5px; /* Posição sobre a foto */
+  right: 5px; /* Posição sobre a foto */
+
+=======
   bottom: 5px;
   right: 5px;
+>>>>>>> e583fc70d4f09ebf52234f5ffc70b134c6e9d7b5
   background-color: var(--cor-branco);
   color: var(--cor-principal);
   font-size: 14px;
@@ -218,17 +262,30 @@ body {
   object-fit: cover;
   border: 4px solid var(--cor-branco);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+<<<<<<< HEAD
+=======
 }
 
 .profile-info {
   text-align: center;
   width: 100%;
+>>>>>>> e583fc70d4f09ebf52234f5ffc70b134c6e9d7b5
 }
 
 .profile-info .profile-nome-input,
 .profile-info .profile-titulo-input {
   border: none;
   background: none;
+<<<<<<< HEAD
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  font-family: inherit; /* Garante a mesma fonte */
+}
+
+.profile-info .profile-nome-input {
+  font-size: 28px; /* Mesmo tamanho do H1 original */
+=======
   padding: 5px 10px;
   margin: 0;
   width: 100%;
@@ -239,20 +296,30 @@ body {
 
 .profile-info .profile-nome-input {
   font-size: 28px;
+>>>>>>> e583fc70d4f09ebf52234f5ffc70b134c6e9d7b5
   font-weight: 700;
   color: var(--cor-texto);
 }
 
 .profile-info .profile-titulo-input {
+<<<<<<< HEAD
+  font-size: 16px; /* Mesmo tamanho do P original */
+  color: var(--cor-texto-claro); /* Mesmo cor do P original */
+=======
   font-size: 16px;
   color: var(--cor-texto-claro);
+>>>>>>> e583fc70d4f09ebf52234f5ffc70b134c6e9d7b5
   margin-top: 5px;
 }
 
 .profile-info .profile-nome-input:focus,
 .profile-info .profile-titulo-input:focus {
   outline: none;
+<<<<<<< HEAD
+  box-shadow: 0 0 0 3px rgba(0, 49, 143, 0.1); /* Usa a cor principal */
+=======
   box-shadow: 0 0 0 3px rgba(0, 49, 143, 0.1);
+>>>>>>> e583fc70d4f09ebf52234f5ffc70b134c6e9d7b5
   border-radius: 4px;
 }
 
@@ -278,11 +345,26 @@ body {
 /* --- GRID --- */
 .profile-grid {
   width: 100%;
+<<<<<<< HEAD
+  max-width: 1100px;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 15px;
+  align-items: start;
+}
+
+/* Wrapper para coluna principal (habilidades + eventos) */
+.main-column {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+=======
   max-width: 700px;
   display: grid;
   grid-template-columns: 1fr;
   gap: 30px;
   align-items: start;
+>>>>>>> e583fc70d4f09ebf52234f5ffc70b134c6e9d7b5
 }
 
 /* Habilidades */
@@ -292,12 +374,29 @@ body {
   border-radius: 8px;
   border: 1px solid var(--cor-borda);
   text-align: left;
+<<<<<<< HEAD
+}
+
+/* Seção de Eventos */
+.events-section {
+  background: var(--cor-branco);
+  padding: 30px;
+  border-radius: 8px;
+  border: 1px solid var(--cor-borda);
+  text-align: left;
+}
+
+.skills-section h2,
+.events-section h2 {
+  font-size: 24px;
+=======
   width: 100%;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
 }
 
 .skills-section h2 {
   font-size: 20px;
+>>>>>>> e583fc70d4f09ebf52234f5ffc70b134c6e9d7b5
   font-weight: 600;
   color: var(--cor-principal);
   margin-bottom: 25px;
@@ -381,10 +480,9 @@ body {
   background: var(--cor-branco);
   border: 1px solid var(--cor-borda);
   border-radius: 8px;
-  padding: 30px;
+  padding: 24px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
   text-align: left;
-  width: 100%;
 }
 
 .about-card h3 {
@@ -400,11 +498,11 @@ body {
   color: var(--cor-texto);
   font-family: inherit;
   width: 100%;
-  min-height: 120px;
+  min-height: 120px; /* Tamanho inicial */
   padding: 1rem;
   border: 1px solid var(--cor-borda);
   border-radius: 8px;
-  resize: vertical;
+  resize: vertical; /* Permite ao usuário redimensionar verticalmente */
 }
 
 .about-card textarea:focus {
@@ -417,7 +515,13 @@ body {
   display: block;
   width: 100%;
   max-width: 250px;
+<<<<<<< HEAD
+  margin: 40px auto 0 auto; /* Centralizado com espaço acima */
+
+  /* Reutiliza o estilo do .btn-primary */
+=======
   margin: 40px auto 0 auto;
+>>>>>>> e583fc70d4f09ebf52234f5ffc70b134c6e9d7b5
   padding: 12px 24px;
   border: none;
   border-radius: 50px;
@@ -465,16 +569,33 @@ body {
 
 /* --- RESPONSIVIDADE --- */
 @media (max-width: 900px) {
+<<<<<<< HEAD
+  body {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr;
+  }
+
+  .main-content {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+=======
   .main-content {
     padding: 20px;
   }
 
   .profile-header {
     margin-bottom: 20px;
+>>>>>>> e583fc70d4f09ebf52234f5ffc70b134c6e9d7b5
   }
 
   .profile-grid {
     grid-template-columns: 1fr;
+<<<<<<< HEAD
+    max-width: 700px;
+  }
+
+=======
     max-width: 100%;
     gap: 20px;
   }
@@ -483,6 +604,7 @@ body {
     padding: 20px;
   }
 
+>>>>>>> e583fc70d4f09ebf52234f5ffc70b134c6e9d7b5
   .btn-float {
     bottom: 20px;
     right: 20px;
