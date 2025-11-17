@@ -83,7 +83,8 @@
         </div>
 
         <div class="profile-grid">
-            <!-- ABA 1: HABILIDADES (coluna esquerda) -->
+
+            <!-- ABA 1 -->
             <div class="tab-content active" id="tab-habilidades">
                 <section class="skills-section">
                     <h2>Minhas habilidades</h2>
@@ -96,12 +97,11 @@
                         </div>
                     </div>
 
-                    <div class="skills-list" id="skills-list">
-                    </div>
+                    <div class="skills-list" id="skills-list"></div>
                 </section>
             </div>
 
-            <!-- ABA 2: MINHAS INSCRIÇÕES (largura total) -->
+            <!-- ABA 2 -->
             <div class="tab-content" id="tab-eventos">
                 <section class="eventos-section">
                     <h2>Eventos Inscritos</h2>
@@ -112,8 +112,7 @@
                         <p>Carregando seus eventos...</p>
                     </div>
 
-                    <div id="eventos-list" class="eventos-list" style="display: none;">
-                    </div>
+                    <div id="eventos-list" class="eventos-list" style="display: none;"></div>
 
                     <div id="eventos-empty" class="empty-state" style="display: none;">
                         <i class="fas fa-calendar-times"></i>
@@ -124,7 +123,7 @@
                 </section>
             </div>
 
-            <!-- ABA 3: HISTÓRICO (largura total) -->
+            <!-- ABA 3 -->
             <div class="tab-content" id="tab-historico">
                 <section class="eventos-section">
                     <h2>Histórico de Eventos</h2>
@@ -135,8 +134,7 @@
                         <p>Carregando seu histórico...</p>
                     </div>
 
-                    <div id="historico-list" class="eventos-list" style="display: none;">
-                    </div>
+                    <div id="historico-list" class="eventos-list" style="display: none;"></div>
 
                     <div id="historico-empty" class="empty-state" style="display: none;">
                         <i class="fas fa-history"></i>
@@ -144,22 +142,20 @@
                         <p>Você ainda não participou de nenhum evento.</p>
                         <a href="homepage.html" class="btn-primary">Ver Eventos Disponíveis</a>
                     </div>
+                    <!-- Ícone de Certificado (somente quando o evento estiver concluído) -->
+<div class="certificado-icon" data-evento-id="ID_DO_EVENTO" style="display: none;">
+    <i class="fas fa-file-certificate"></i>
+</div>
+
                 </section>
             </div>
 
-            <!-- COLUNA DIREITA: SOBRE MIM (sempre visível quando habilidades está ativa) -->
+            <!-- COLUNA DIREITA -->
             <aside class="about-section">
                 <div class="about-card">
                     <h3>Sobre mim</h3>
-                    <textarea
-                        id="profile-sobre"
-                        rows="8"
-                        placeholder="Escreva um pouco sobre você..."
-                    ></textarea>
-                    
-                    <button id="save-profile-btn" class="btn-primary">
-                        Salvar Alterações
-                    </button>
+                    <textarea id="profile-sobre" rows="8" placeholder="Escreva um pouco sobre você..."></textarea>
+                    <button id="save-profile-btn" class="btn-primary">Salvar Alterações</button>
                 </div>
             </aside>
         </div>
