@@ -25,32 +25,23 @@ function parseDataSegura(dataString) {
 // ===========================
 async function carregarEventosFuturos() {
     try {
-        const resposta = await fetch(`${API_URL}/eventos`, {
+        const resposta = await fetch(`${API_URL}/eventos/futuros`, {
             headers: {
                 "Authorization": `Bearer ${token}`,
                 "Content-Type": "application/json"
             }
         });
 
+        console.log("STATUS:", resposta.status);
+
         if (!resposta.ok) {
             throw new Error(`Erro ao buscar eventos: ${resposta.status}`);
         }
 
         const eventos = await resposta.json();
+        console.log("EVENTOS FUTUROS RECEBIDOS:", eventos);
 
-        const hoje = new Date();
-        hoje.setHours(0, 0, 0, 0);
-
-        // 🔥 TRATAMENTO DEFINITIVO PARA NÃO EXIBIR EVENTOS ANTIGOS
-        const eventosFuturos = eventos
-            .map(ev => ({
-                ...ev,
-                dataObj: parseDataSegura(ev.data)
-            }))
-            .filter(ev => ev.dataObj && ev.dataObj >= hoje)
-            .sort((a, b) => a.dataObj - b.dataObj);
-
-        renderizarEventos(eventosFuturos);
+        renderizarEventos(eventos);
 
     } catch (erro) {
         console.error("Erro:", erro);
@@ -66,7 +57,7 @@ function renderizarEventos(eventos) {
     const container = document.getElementById("eventosContainer");
     container.innerHTML = "";
 
-    if (eventos.length === 0) {
+    if (!eventos || eventos.length === 0) {
         container.innerHTML = "<p>Nenhum evento futuro encontrado.</p>";
         return;
     }
