@@ -1,61 +1,67 @@
 // ===============================================
-// ARQUIVO: homepage.js (VERSÃO FINAL DEFINITIVA)
+// homepage.js — VERSÃO FINAL CORRIGIDA
 // ===============================================
 
+// Carrega configurações globais do global.js
+// API_URL, SERVER_URL e token já estão disponíveis
+
 document.addEventListener("DOMContentLoaded", () => {
-    carregarEventos();
-    setupCarousels('[data-carousel-id="cursos"]');
+    carregarEventosFuturos();
 });
 
-// ====================================================
-// FUNÇÃO SEGURA PARA PARSE DE LOCALDATE DO BACK-END
-// ====================================================
-// O back-end envia: "yyyy-MM-dd"
-// NÃO USAR new Date("2025-11-21") porque o JS converte para UTC!
-// ====================================================
-function parseDataSegura(dataStr) {
-    if (!dataStr) return null;
-
-    const partes = dataStr.split("-");
+// ===========================
+// Função SEGURA para converter data (sem fuso, sem erro)
+// ===========================
+function parseDataSegura(dataString) {
+    if (!dataString) return null;
+    const partes = dataString.split("-");
     if (partes.length !== 3) return null;
 
-    const ano = parseInt(partes[0]);
-    const mes = parseInt(partes[1]) - 1;
-    const dia = parseInt(partes[2]);
-
-    const d = new Date(ano, mes, dia);
-    if (isNaN(d.getTime())) return null;
-
-    d.setHours(0, 0, 0, 0);
-    return d;
+    return new Date(Number(partes[0]), Number(partes[1]) - 1, Number(partes[2]));
 }
 
-// =====================
-// EVENTOS
-// =====================
-async function carregarEventos() {
+// ===========================
+// Carregar eventos futuros
+// ===========================
+async function carregarEventosFuturos() {
     try {
-        const response = await fetch(`${API_URL}/eventos`);
-        const eventos = await response.json();
-
-        const hoje = new Date();
-        hoje.setHours(0, 0, 0, 0); // zera horas para comparação exata
-
-        // FILTRAR APENAS EVENTOS FUTUROS
-        const eventosFuturos = eventos.filter(ev => {
-            const dataEvento = new Date(ev.data + "T00:00:00");
-            return dataEvento >= hoje;
+        const resposta = await fetch(`${API_URL}/eventos`, {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
         });
 
-        console.log("EVENTOS FUTUROS:", eventosFuturos);
+        if (!resposta.ok) {
+            throw new Error(`Erro ao buscar eventos: ${resposta.status}`);
+        }
+
+        const eventos = await resposta.json();
+
+        const hoje = new Date();
+        hoje.setHours(0, 0, 0, 0);
+
+        // 🔥 TRATAMENTO DEFINITIVO PARA NÃO EXIBIR EVENTOS ANTIGOS
+        const eventosFuturos = eventos
+            .map(ev => ({
+                ...ev,
+                dataObj: parseDataSegura(ev.data)
+            }))
+            .filter(ev => ev.dataObj && ev.dataObj >= hoje)
+            .sort((a, b) => a.dataObj - b.dataObj);
 
         renderizarEventos(eventosFuturos);
 
     } catch (erro) {
-        console.error("Erro ao carregar eventos:", erro);
+        console.error("Erro:", erro);
+        document.getElementById("eventosContainer").innerHTML =
+            "<p>Erro ao carregar eventos.</p>";
     }
 }
 
+// ===========================
+// Renderizar eventos
+// ===========================
 function renderizarEventos(eventos) {
     const container = document.getElementById("eventosContainer");
     container.innerHTML = "";
@@ -66,76 +72,18 @@ function renderizarEventos(eventos) {
     }
 
     eventos.forEach(evento => {
+        const [ano, mes, dia] = evento.data.split("-");
+        const dataFormatada = `${dia}/${mes}/${ano}`;
+
         const card = `
             <div class="card-evento">
                 <h3>${evento.nome}</h3>
-                <p><strong>Data:</strong> ${evento.data}</p>
+                <p><strong>Data:</strong> ${dataFormatada}</p>
                 <p><strong>Hora:</strong> ${evento.hora}</p>
                 <p><strong>Local:</strong> ${evento.local}</p>
             </div>
         `;
+
         container.innerHTML += card;
     });
-}
-
-carregarEventos();
-
-
-// =====================
-// CARROSSEL
-// =====================
-function setupCarousels(selector) {
-    const carousel = document.querySelector(selector);
-    if (!carousel) return;
-
-    const track = carousel.querySelector(".carousel-track");
-    const prevButton = carousel.querySelector(".carousel-arrow.prev");
-    const nextButton = carousel.querySelector(".carousel-arrow.next");
-
-    if (!track || !prevButton || !nextButton) return;
-
-    let index = 0;
-    const cards = carousel.querySelectorAll(".card");
-    const totalCards = cards.length;
-    const visibleCards = 3;
-
-    if (totalCards === 0) {
-        prevButton.style.display = "none";
-        nextButton.style.display = "none";
-        return;
-    }
-
-    if (totalCards <= visibleCards) {
-        prevButton.style.display = "none";
-        nextButton.style.display = "none";
-    }
-
-    function updateCarousel() {
-        if (cards.length === 0) return;
-
-        const cardStyle = getComputedStyle(cards[0]);
-        const cardWidth =
-            cards[0].offsetWidth +
-            parseInt(cardStyle.marginRight || 0) +
-            parseInt(cardStyle.marginLeft || 0);
-
-        if (cardWidth === 0) return;
-
-        track.style.transform = `translateX(-${index * cardWidth}px)`;
-        prevButton.disabled = index === 0;
-        nextButton.disabled = index >= Math.max(0, totalCards - visibleCards);
-    }
-
-    prevButton.addEventListener("click", () => {
-        index = Math.max(index - 1, 0);
-        updateCarousel();
-    });
-
-    nextButton.addEventListener("click", () => {
-        index = Math.min(index + 1, Math.max(0, totalCards - visibleCards));
-        updateCarousel();
-    });
-
-    updateCarousel();
-    window.addEventListener("resize", updateCarousel);
 }
