@@ -14,79 +14,89 @@ document.addEventListener("DOMContentLoaded", () => {
 // =====================
 // EVENTOS (ESPECÍFICO DA HOMEPAGE)
 // =====================
+// =====================
+// EVENTOS (ESPECÍFICO DA HOMEPAGE)
+// =====================
 async function carregarEventos() {
-    // 'API_URL' e 'token' vêm do global.js
     const eventosURL = `${API_URL}/eventos`;
     const track = document.querySelector('[data-carousel-id="eventos"] .carousel-track');
 
-    if (!track) {
-        console.warn('Elemento .carousel-track para [eventos] não encontrado.');
-        return;
-    }
+    if (!track) return;
 
     try {
         const response = await fetch(eventosURL, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: "Bearer " + token, // Usa a const global
+                Authorization: "Bearer " + token,
             },
         });
 
-        if (!response.ok) {
-            // Se falhar (ex: 401), o global.js já vai ter pego
-            // Mas é bom tratar o erro aqui também
-            throw new Error('Falha ao carregar eventos.');
-        }
+        if (!response.ok) throw new Error('Falha ao carregar eventos.');
 
         const eventos = await response.json();
-        track.innerHTML = ""; // Limpa o "Carregando..."
+        track.innerHTML = ""; 
 
         // ====================================================
-        // 💡 LÓGICA DE FILTRAGEM E ORDENAÇÃO DE EVENTOS FUTUROS
+        // 💡 NOVA LÓGICA DE FILTRAGEM (INTEIROS)
         // ====================================================
 
-        // 1. Define a data de hoje, zerando as horas (00:00:00) para garantir comparação por dia
-        const hoje = new Date();
-        hoje.setHours(0, 0, 0, 0); 
-        const hojeTimestamp = hoje.getTime(); 
+        // 1. Cria um número inteiro para HOJE (Ex: 20251124)
+        const hojeObj = new Date();
+        const hojeInteiro = (hojeObj.getFullYear() * 10000) + 
+                            ((hojeObj.getMonth() + 1) * 100) + 
+                            hojeObj.getDate();
+        
+        console.log("📅 Data de Hoje (Inteiro):", hojeInteiro);
 
-        const eventosFuturos = eventos
-            .filter(evento => {
-                // Tenta criar o objeto Date a partir da string da API
-                const dataEventoRaw = new Date(evento.data);
-                
-                // Verifica se a data é válida
-                if (isNaN(dataEventoRaw.getTime())) return false;
+        const eventosFuturos = eventos.filter(evento => {
+            if (!evento.data) return false;
 
-                // ZERA as horas da data do evento para comparar APENAS o dia
-                dataEventoRaw.setHours(0, 0, 0, 0); 
-                
-                // Retorna TRUE se a data do evento for MAIOR OU IGUAL (>=) à data de hoje
-                return dataEventoRaw.getTime() >= hojeTimestamp;
-            })
-            // Ordena os eventos do mais próximo ao mais distante
-            .sort((a, b) => new Date(a.data) - new Date(b.data)); 
+            // Tenta criar a data. Se falhar, tenta corrigir formato BR
+            let dataObj = new Date(evento.data);
+            
+            // Se for Invalid Date (ex: formato DD/MM/AAAA puro), ajusta manualmente
+            if (isNaN(dataObj.getTime())) {
+                const partes = evento.data.split('/'); // Tenta dividir 21/11/2025
+                if (partes.length === 3) {
+                    // Cria new Date(ano, mês-1, dia)
+                    dataObj = new Date(partes[2], partes[1] - 1, partes[0]);
+                }
+            }
+
+            // Se ainda for inválido, ignora esse evento
+            if (isNaN(dataObj.getTime())) return false;
+
+            // 2. Cria um número inteiro para o EVENTO (Ex: 20251121)
+            const eventoInteiro = (dataObj.getFullYear() * 10000) + 
+                                  ((dataObj.getMonth() + 1) * 100) + 
+                                  dataObj.getDate();
+
+            // Debug no console (F12) para ver o que está acontecendo
+            // console.log(`Checando: ${evento.nome} | Data: ${eventoInteiro} >= Hoje: ${hojeInteiro} ?`);
+
+            // 3. Compara: O evento é maior ou igual a hoje?
+            return eventoInteiro >= hojeInteiro;
+        })
+        .sort((a, b) => new Date(a.data) - new Date(b.data));
 
         // ====================================================
 
         if (eventosFuturos.length === 0) {
-            track.innerHTML = '<p style="padding: 0 20px; color: #555;">Nenhum evento disponível no momento.</p>';
+            track.innerHTML = '<p style="padding: 0 20px; color: #555;">Nenhum evento futuro encontrado.</p>';
             return;
         }
 
-        // Itera sobre a lista FILTRADA E ORDENADA (eventosFuturos)
         eventosFuturos.forEach((evento) => {
             const card = document.createElement("div");
             card.classList.add("card");
 
             const img = document.createElement("img");
-            img.src = "assets/pictures/liferay-devcon.jpg"; // TODO: Usar img do evento
-            img.alt = evento.nome || "Evento Liferay";
+            img.src = "assets/pictures/liferay-devcon.jpg"; 
+            img.alt = evento.nome || "Evento";
 
             const h3 = document.createElement("h3");
             const link = document.createElement("a");
-            // ATENÇÃO: Verifique se essa URL de detalhes está correta!
             link.href = `detalhes-evento.html?id=${evento.id}`; 
             link.textContent = evento.nome || "Evento sem nome";
             link.style.color = "inherit";
@@ -95,33 +105,33 @@ async function carregarEventos() {
 
             const data = document.createElement("p");
             if (evento.data) {
-                // Formata a data para exibição
-                const dataFormatada = new Date(evento.data).toLocaleDateString("pt-BR", {
-                    timeZone: "UTC", // Importante para formatação consistente
-                });
-                data.textContent = dataFormatada;
+                // Tenta formatar bonitinho
+                const d = new Date(evento.data);
+                // Ajuste de segurança para exibição se a data for válida
+                if (!isNaN(d.getTime())) {
+                     data.textContent = d.toLocaleDateString("pt-BR", { timeZone: 'UTC' });
+                } else {
+                     data.textContent = evento.data; // fallback
+                }
             }
 
             const descricao = document.createElement("p");
             if (evento.descricao) {
-                descricao.textContent =
-                    evento.descricao.substring(0, 100) +
-                    (evento.descricao.length > 100 ? "..." : "");
+                descricao.textContent = evento.descricao.substring(0, 100) + "...";
             }
 
             card.appendChild(img);
             card.appendChild(h3);
             card.appendChild(data);
             card.appendChild(descricao);
-
             track.appendChild(card);
         });
 
-        // Chama o carrossel DEPOIS que os cards de EVENTOS forem criados
         setupCarousels('[data-carousel-id="eventos"]'); 
+
     } catch (error) {
         console.error("Erro ao carregar eventos:", error);
-        track.innerHTML = `<p style="text-align:center;color:red;">Não foi possível carregar os eventos.</p>`;
+        track.innerHTML = `<p style="text-align:center;color:red;">Erro ao carregar.</p>`;
     }
 }
 
