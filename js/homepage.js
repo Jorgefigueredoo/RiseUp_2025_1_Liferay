@@ -34,93 +34,52 @@ function parseDataSegura(dataStr) {
 // EVENTOS
 // =====================
 async function carregarEventos() {
-    const eventosURL = `${API_URL}/eventos`;
-    const track = document.querySelector('[data-carousel-id="eventos"] .carousel-track');
-
-    if (!track) return;
-
     try {
-        const response = await fetch(eventosURL, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: "Bearer " + token,
-            },
-        });
-
-        if (!response.ok) throw new Error("Falha ao carregar eventos.");
-
+        const response = await fetch(`${API_URL}/eventos`);
         const eventos = await response.json();
-        track.innerHTML = "";
 
-        // =============================
-        // FILTRAGEM — APENAS EVENTOS FUTUROS
-        // =============================
         const hoje = new Date();
-        hoje.setHours(0, 0, 0, 0);
+        hoje.setHours(0, 0, 0, 0); // zera horas para comparação exata
 
-        const eventosFuturos = eventos
-            .filter(evento => {
-                const data = parseDataSegura(evento.data);
-                return data && data >= hoje;
-            })
-            .sort((a, b) => {
-                const dataA = parseDataSegura(a.data);
-                const dataB = parseDataSegura(b.data);
-                return dataA - dataB;
-            });
-
-        if (eventosFuturos.length === 0) {
-            track.innerHTML =
-                '<p style="padding: 0 20px; color: #555;">Nenhum evento futuro encontrado.</p>';
-            return;
-        }
-
-        // =============================
-        // RENDERIZAÇÃO DOS CARDS
-        // =============================
-        eventosFuturos.forEach(evento => {
-            const card = document.createElement("div");
-            card.classList.add("card");
-
-            const img = document.createElement("img");
-            img.src = "assets/pictures/liferay-devcon.jpg";
-            img.alt = evento.nome || "Evento";
-
-            const h3 = document.createElement("h3");
-            const link = document.createElement("a");
-            link.href = `detalhes-evento.html?id=${evento.id}`;
-            link.textContent = evento.nome || "Evento sem nome";
-            link.style.color = "inherit";
-            link.style.textDecoration = "none";
-            h3.appendChild(link);
-
-            const dataEl = document.createElement("p");
-            if (evento.data) {
-                const dataFormatada = parseDataSegura(evento.data)?.toLocaleDateString("pt-BR");
-                dataEl.textContent = dataFormatada || evento.data;
-            }
-
-            const descricao = document.createElement("p");
-            if (evento.descricao) {
-                descricao.textContent =
-                    evento.descricao.substring(0, 100) +
-                    (evento.descricao.length > 100 ? "..." : "");
-            }
-
-            card.appendChild(img);
-            card.appendChild(h3);
-            card.appendChild(dataEl);
-            card.appendChild(descricao);
-            track.appendChild(card);
+        // FILTRAR APENAS EVENTOS FUTUROS
+        const eventosFuturos = eventos.filter(ev => {
+            const dataEvento = new Date(ev.data + "T00:00:00");
+            return dataEvento >= hoje;
         });
 
-        setupCarousels('[data-carousel-id="eventos"]');
-    } catch (error) {
-        console.error("Erro ao carregar eventos:", error);
-        track.innerHTML = `<p style="text-align:center;color:red;">Erro ao carregar.</p>`;
+        console.log("EVENTOS FUTUROS:", eventosFuturos);
+
+        renderizarEventos(eventosFuturos);
+
+    } catch (erro) {
+        console.error("Erro ao carregar eventos:", erro);
     }
 }
+
+function renderizarEventos(eventos) {
+    const container = document.getElementById("eventosContainer");
+    container.innerHTML = "";
+
+    if (eventos.length === 0) {
+        container.innerHTML = "<p>Nenhum evento futuro encontrado.</p>";
+        return;
+    }
+
+    eventos.forEach(evento => {
+        const card = `
+            <div class="card-evento">
+                <h3>${evento.nome}</h3>
+                <p><strong>Data:</strong> ${evento.data}</p>
+                <p><strong>Hora:</strong> ${evento.hora}</p>
+                <p><strong>Local:</strong> ${evento.local}</p>
+            </div>
+        `;
+        container.innerHTML += card;
+    });
+}
+
+carregarEventos();
+
 
 // =====================
 // CARROSSEL
