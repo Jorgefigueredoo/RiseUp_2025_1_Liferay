@@ -1,21 +1,14 @@
 // ===============================================
-// ARQUIVO: homepage.js
+// ARQUIVO: homepage.js (CORRIGIDO E BLINDADO)
 // ===============================================
 
 document.addEventListener("DOMContentLoaded", () => {
-    // A única coisa que a homepage precisa fazer
     carregarEventos();
-
-    // O carrossel de cursos já está estático no HTML,
-    // então podemos ligar ele imediatamente.
     setupCarousels('[data-carousel-id="cursos"]');
 });
 
 // =====================
-// EVENTOS (ESPECÍFICO DA HOMEPAGE)
-// =====================
-// =====================
-// EVENTOS (ESPECÍFICO DA HOMEPAGE)
+// EVENTOS
 // =====================
 async function carregarEventos() {
     const eventosURL = `${API_URL}/eventos`;
@@ -37,50 +30,59 @@ async function carregarEventos() {
         const eventos = await response.json();
         track.innerHTML = ""; 
 
-        // ====================================================
-        // 💡 NOVA LÓGICA DE FILTRAGEM (INTEIROS)
-        // ====================================================
-
-        // 1. Cria um número inteiro para HOJE (Ex: 20251124)
-        const hojeObj = new Date();
-        const hojeInteiro = (hojeObj.getFullYear() * 10000) + 
-                            ((hojeObj.getMonth() + 1) * 100) + 
-                            hojeObj.getDate();
+        // -----------------------------------------------------------
+        // 🔒 LÓGICA DE FILTRAGEM (DATA SEGURA)
+        // -----------------------------------------------------------
         
-        console.log("📅 Data de Hoje (Inteiro):", hojeInteiro);
+        // 1. Pega a data de HOJE e zera as horas (00:00:00)
+        const hoje = new Date();
+        hoje.setHours(0, 0, 0, 0);
 
         const eventosFuturos = eventos.filter(evento => {
             if (!evento.data) return false;
 
-            // Tenta criar a data. Se falhar, tenta corrigir formato BR
-            let dataObj = new Date(evento.data);
-            
-            // Se for Invalid Date (ex: formato DD/MM/AAAA puro), ajusta manualmente
-            if (isNaN(dataObj.getTime())) {
-                const partes = evento.data.split('/'); // Tenta dividir 21/11/2025
-                if (partes.length === 3) {
-                    // Cria new Date(ano, mês-1, dia)
-                    dataObj = new Date(partes[2], partes[1] - 1, partes[0]);
-                }
+            let dataEvento;
+
+            // CASO 1: Data vem como "2025-11-21" (ISO)
+            if (evento.data.includes('-')) {
+                // Divide a string para evitar conversão de fuso horário automática
+                // Ex: "2025-11-21" vira [2025, 11, 21]
+                const partes = evento.data.split('T')[0].split('-'); 
+                // new Date(ano, mes-1, dia) cria a data no horário local do usuário
+                dataEvento = new Date(partes[0], partes[1] - 1, partes[2]);
+            } 
+            // CASO 2: Data vem como "21/11/2025" (BR)
+            else if (evento.data.includes('/')) {
+                const partes = evento.data.split('/');
+                // new Date(ano, mes-1, dia)
+                dataEvento = new Date(partes[2], partes[1] - 1, partes[0]);
+            } 
+            // FALLBACK: Tenta conversão padrão se falhar
+            else {
+                dataEvento = new Date(evento.data);
             }
 
-            // Se ainda for inválido, ignora esse evento
-            if (isNaN(dataObj.getTime())) return false;
+            // Segurança: Se a data for inválida, remove o evento
+            if (isNaN(dataEvento.getTime())) return false;
 
-            // 2. Cria um número inteiro para o EVENTO (Ex: 20251121)
-            const eventoInteiro = (dataObj.getFullYear() * 10000) + 
-                                  ((dataObj.getMonth() + 1) * 100) + 
-                                  dataObj.getDate();
+            // Zera as horas do evento para comparar apenas o dia
+            dataEvento.setHours(0, 0, 0, 0);
 
-            // Debug no console (F12) para ver o que está acontecendo
-            // console.log(`Checando: ${evento.nome} | Data: ${eventoInteiro} >= Hoje: ${hojeInteiro} ?`);
+            // LOG PARA DEBUG (Ative se necessário apertando F12)
+            // console.log(`Evento: ${evento.nome} | DataEvento: ${dataEvento.toLocaleDateString()} | Hoje: ${hoje.toLocaleDateString()} | Passou? ${dataEvento >= hoje}`);
 
-            // 3. Compara: O evento é maior ou igual a hoje?
-            return eventoInteiro >= hojeInteiro;
+            // COMPARAÇÃO: Retorna true se a data for igual ou futura
+            return dataEvento.getTime() >= hoje.getTime();
         })
-        .sort((a, b) => new Date(a.data) - new Date(b.data));
+        .sort((a, b) => {
+            // Ordenação também precisa ser segura
+            // Recriamos os objetos date aqui para garantir a conta certa
+            const dateA = new Date(a.data);
+            const dateB = new Date(b.data);
+            return dateA - dateB; 
+        });
 
-        // ====================================================
+        // -----------------------------------------------------------
 
         if (eventosFuturos.length === 0) {
             track.innerHTML = '<p style="padding: 0 20px; color: #555;">Nenhum evento futuro encontrado.</p>';
@@ -103,26 +105,25 @@ async function carregarEventos() {
             link.style.textDecoration = "none";
             h3.appendChild(link);
 
-            const data = document.createElement("p");
+            const dataEl = document.createElement("p");
             if (evento.data) {
-                // Tenta formatar bonitinho
+                // Exibição amigável
+                // Se for ISO, converte para UTC para não voltar um dia na string
                 const d = new Date(evento.data);
-                // Ajuste de segurança para exibição se a data for válida
-                if (!isNaN(d.getTime())) {
-                     data.textContent = d.toLocaleDateString("pt-BR", { timeZone: 'UTC' });
-                } else {
-                     data.textContent = evento.data; // fallback
-                }
+                // Pequeno ajuste visual para evitar que mostre dia anterior na tela
+                const visualDate = d.toLocaleDateString("pt-BR", { timeZone: 'UTC' });
+                // Se o resultado for "Invalid Date", mostra a string original
+                dataEl.textContent = visualDate !== "Invalid Date" ? visualDate : evento.data;
             }
 
             const descricao = document.createElement("p");
             if (evento.descricao) {
-                descricao.textContent = evento.descricao.substring(0, 100) + "...";
+                descricao.textContent = evento.descricao.substring(0, 100) + (evento.descricao.length > 100 ? "..." : "");
             }
 
             card.appendChild(img);
             card.appendChild(h3);
-            card.appendChild(data);
+            card.appendChild(dataEl);
             card.appendChild(descricao);
             track.appendChild(card);
         });
@@ -136,15 +137,11 @@ async function carregarEventos() {
 }
 
 // =====================
-// CARROSSEL (Lógica genérica de carrossel)
+// CARROSSEL
 // =====================
 function setupCarousels(selector) {
-    // Pega só o carrossel que foi pedido (eventos ou cursos)
     const carousel = document.querySelector(selector);
-    if (!carousel) {
-        console.warn(`Carrossel "${selector}" não encontrado.`);
-        return;
-    }
+    if (!carousel) return;
 
     const track = carousel.querySelector(".carousel-track");
     const prevButton = carousel.querySelector(".carousel-arrow.prev");
@@ -155,7 +152,7 @@ function setupCarousels(selector) {
     let index = 0;
     const cards = carousel.querySelectorAll(".card");
     const totalCards = cards.length;
-    const visibleCards = 3; // Você pode ajustar isso
+    const visibleCards = 3; 
 
     if (totalCards === 0) {
         prevButton.style.display = "none";
@@ -163,7 +160,6 @@ function setupCarousels(selector) {
         return;
     }
 
-    // Esconde botões se não houver cards suficientes para rolar
     if (totalCards <= visibleCards) {
         prevButton.style.display = 'none';
         nextButton.style.display = 'none';
@@ -172,10 +168,7 @@ function setupCarousels(selector) {
     function updateCarousel() {
         if (cards.length === 0) return;
         const cardStyle = getComputedStyle(cards[0]);
-        const cardWidth =
-            cards[0].offsetWidth +
-            parseInt(cardStyle.marginRight || 0) +
-            parseInt(cardStyle.marginLeft || 0);
+        const cardWidth = cards[0].offsetWidth + parseInt(cardStyle.marginRight || 0) + parseInt(cardStyle.marginLeft || 0);
 
         if (cardWidth === 0) return;
 
@@ -194,7 +187,6 @@ function setupCarousels(selector) {
         updateCarousel();
     });
 
-    // Atualiza na hora e também se a janela mudar de tamanho
     updateCarousel();
     window.addEventListener('resize', updateCarousel);
 }
