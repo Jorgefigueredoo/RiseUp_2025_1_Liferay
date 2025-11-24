@@ -1,5 +1,5 @@
 // ===============================================
-// ARQUIVO: homepage.js (CORRIGIDO E BLINDADO DEFINITIVO)
+// ARQUIVO: homepage.js (VERSÃO FINAL DEFINITIVA)
 // ===============================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -7,40 +7,34 @@ document.addEventListener("DOMContentLoaded", () => {
     setupCarousels('[data-carousel-id="cursos"]');
 });
 
-// =====================
-// FUNÇÃO SEGURA PARA PARSE DE DATAS
-// =====================
+// ====================================================
+// FUNÇÃO SEGURA PARA PARSE DE LOCALDATE DO BACK-END
+// ====================================================
+// O back-end envia: "yyyy-MM-dd"
+// NÃO USAR new Date("2025-11-21") porque o JS converte para UTC!
+// ====================================================
 function parseDataSegura(dataStr) {
     if (!dataStr) return null;
 
-    let data;
+    const partes = dataStr.split("-");
+    if (partes.length !== 3) return null;
 
-    // Formato ISO: "2025-11-21" ou "2025-11-21T00:00:00"
-    if (dataStr.includes('-')) {
-        const partes = dataStr.split('T')[0].split('-'); 
-        data = new Date(partes[0], partes[1] - 1, partes[2]);
-    }
-    // Formato BR: "21/11/2025"
-    else if (dataStr.includes('/')) {
-        const partes = dataStr.split('/');
-        data = new Date(partes[2], partes[1] - 1, partes[0]);
-    }
-    else {
-        data = new Date(dataStr);
-    }
+    const ano = parseInt(partes[0]);
+    const mes = parseInt(partes[1]) - 1;
+    const dia = parseInt(partes[2]);
 
-    if (isNaN(data.getTime())) return null;
+    const d = new Date(ano, mes, dia);
+    if (isNaN(d.getTime())) return null;
 
-    // Zera horas para evitar falhas na comparação
-    data.setHours(0, 0, 0, 0);
-    return data;
+    d.setHours(0, 0, 0, 0);
+    return d;
 }
 
 // =====================
 // EVENTOS
 // =====================
 async function carregarEventos() {
-    const eventosURL = `${API_URL}/eventos`; 
+    const eventosURL = `${API_URL}/eventos`;
     const track = document.querySelector('[data-carousel-id="eventos"] .carousel-track');
 
     if (!track) return;
@@ -54,22 +48,21 @@ async function carregarEventos() {
             },
         });
 
-        if (!response.ok) throw new Error('Falha ao carregar eventos.');
+        if (!response.ok) throw new Error("Falha ao carregar eventos.");
 
         const eventos = await response.json();
-        track.innerHTML = ""; 
+        track.innerHTML = "";
 
         // =============================
-        // FILTRAGEM CORRETA — SÓ FUTUROS
+        // FILTRAGEM — APENAS EVENTOS FUTUROS
         // =============================
         const hoje = new Date();
         hoje.setHours(0, 0, 0, 0);
 
         const eventosFuturos = eventos
             .filter(evento => {
-                const dataEvento = parseDataSegura(evento.data);
-                if (!dataEvento) return false;
-                return dataEvento >= hoje;
+                const data = parseDataSegura(evento.data);
+                return data && data >= hoje;
             })
             .sort((a, b) => {
                 const dataA = parseDataSegura(a.data);
@@ -78,14 +71,15 @@ async function carregarEventos() {
             });
 
         if (eventosFuturos.length === 0) {
-            track.innerHTML = '<p style="padding: 0 20px; color: #555;">Nenhum evento futuro encontrado.</p>';
+            track.innerHTML =
+                '<p style="padding: 0 20px; color: #555;">Nenhum evento futuro encontrado.</p>';
             return;
         }
 
         // =============================
         // RENDERIZAÇÃO DOS CARDS
         // =============================
-        eventosFuturos.forEach((evento) => {
+        eventosFuturos.forEach(evento => {
             const card = document.createElement("div");
             card.classList.add("card");
 
@@ -103,13 +97,15 @@ async function carregarEventos() {
 
             const dataEl = document.createElement("p");
             if (evento.data) {
-                const dataFormatada = parseDataSegura(evento.data)?.toLocaleDateString("pt-BR") || evento.data;
-                dataEl.textContent = dataFormatada;
+                const dataFormatada = parseDataSegura(evento.data)?.toLocaleDateString("pt-BR");
+                dataEl.textContent = dataFormatada || evento.data;
             }
 
             const descricao = document.createElement("p");
             if (evento.descricao) {
-                descricao.textContent = evento.descricao.substring(0, 100) + (evento.descricao.length > 100 ? "..." : "");
+                descricao.textContent =
+                    evento.descricao.substring(0, 100) +
+                    (evento.descricao.length > 100 ? "..." : "");
             }
 
             card.appendChild(img);
@@ -119,8 +115,7 @@ async function carregarEventos() {
             track.appendChild(card);
         });
 
-        setupCarousels('[data-carousel-id="eventos"]'); 
-
+        setupCarousels('[data-carousel-id="eventos"]');
     } catch (error) {
         console.error("Erro ao carregar eventos:", error);
         track.innerHTML = `<p style="text-align:center;color:red;">Erro ao carregar.</p>`;
@@ -152,17 +147,18 @@ function setupCarousels(selector) {
     }
 
     if (totalCards <= visibleCards) {
-        prevButton.style.display = 'none';
-        nextButton.style.display = 'none';
+        prevButton.style.display = "none";
+        nextButton.style.display = "none";
     }
 
     function updateCarousel() {
         if (cards.length === 0) return;
 
         const cardStyle = getComputedStyle(cards[0]);
-        const cardWidth = cards[0].offsetWidth 
-            + parseInt(cardStyle.marginRight || 0)
-            + parseInt(cardStyle.marginLeft || 0);
+        const cardWidth =
+            cards[0].offsetWidth +
+            parseInt(cardStyle.marginRight || 0) +
+            parseInt(cardStyle.marginLeft || 0);
 
         if (cardWidth === 0) return;
 
@@ -171,16 +167,16 @@ function setupCarousels(selector) {
         nextButton.disabled = index >= Math.max(0, totalCards - visibleCards);
     }
 
-    prevButton.addEventListener('click', () => {
+    prevButton.addEventListener("click", () => {
         index = Math.max(index - 1, 0);
         updateCarousel();
     });
 
-    nextButton.addEventListener('click', () => {
+    nextButton.addEventListener("click", () => {
         index = Math.min(index + 1, Math.max(0, totalCards - visibleCards));
         updateCarousel();
     });
 
     updateCarousel();
-    window.addEventListener('resize', updateCarousel);
+    window.addEventListener("resize", updateCarousel);
 }
