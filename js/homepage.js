@@ -1,10 +1,6 @@
 // ===============================================
-// ARQUIVO: homepage.js (O "FUNCIONÁRIO")
+// ARQUIVO: homepage.js
 // ===============================================
-//
-// O 'global.js' já cuidou do header, auth e busca.
-// Este arquivo só cuida dos carrosséis da homepage.
-//
 
 document.addEventListener("DOMContentLoaded", () => {
     // A única coisa que a homepage precisa fazer
@@ -38,6 +34,8 @@ async function carregarEventos() {
         });
 
         if (!response.ok) {
+            // Se falhar (ex: 401), o global.js já vai ter pego
+            // Mas é bom tratar o erro aqui também
             throw new Error('Falha ao carregar eventos.');
         }
 
@@ -48,19 +46,27 @@ async function carregarEventos() {
         // 💡 LÓGICA DE FILTRAGEM E ORDENAÇÃO DE EVENTOS FUTUROS
         // ====================================================
 
+        // 1. Define a data de hoje, zerando as horas (00:00:00) para garantir comparação por dia
         const hoje = new Date();
-        // Zera a hora atual para comparar apenas a data (dia/mês/ano)
         hoje.setHours(0, 0, 0, 0); 
+        const hojeTimestamp = hoje.getTime(); 
 
         const eventosFuturos = eventos
             .filter(evento => {
-                const dataEvento = new Date(evento.data);
-                // Zera a hora da data do evento (crucial para comparação)
-                dataEvento.setHours(0, 0, 0, 0); 
-                // Retorna TRUE se a data do evento for maior ou igual (>=) à data de hoje
-                return dataEvento.getTime() >= hoje.getTime();
+                // Tenta criar o objeto Date a partir da string da API
+                const dataEventoRaw = new Date(evento.data);
+                
+                // Verifica se a data é válida
+                if (isNaN(dataEventoRaw.getTime())) return false;
+
+                // ZERA as horas da data do evento para comparar APENAS o dia
+                dataEventoRaw.setHours(0, 0, 0, 0); 
+                
+                // Retorna TRUE se a data do evento for MAIOR OU IGUAL (>=) à data de hoje
+                return dataEventoRaw.getTime() >= hojeTimestamp;
             })
-            .sort((a, b) => new Date(a.data) - new Date(b.data)); // Ordena do mais próximo ao mais distante
+            // Ordena os eventos do mais próximo ao mais distante
+            .sort((a, b) => new Date(a.data) - new Date(b.data)); 
 
         // ====================================================
 
@@ -80,7 +86,8 @@ async function carregarEventos() {
 
             const h3 = document.createElement("h3");
             const link = document.createElement("a");
-            link.href = `detalhes-evento.html?id=${evento.id}`;
+            // ATENÇÃO: Verifique se essa URL de detalhes está correta!
+            link.href = `detalhes-evento.html?id=${evento.id}`; 
             link.textContent = evento.nome || "Evento sem nome";
             link.style.color = "inherit";
             link.style.textDecoration = "none";
@@ -88,8 +95,9 @@ async function carregarEventos() {
 
             const data = document.createElement("p");
             if (evento.data) {
+                // Formata a data para exibição
                 const dataFormatada = new Date(evento.data).toLocaleDateString("pt-BR", {
-                    timeZone: "UTC", // Importante para datas
+                    timeZone: "UTC", // Importante para formatação consistente
                 });
                 data.textContent = dataFormatada;
             }
@@ -110,7 +118,7 @@ async function carregarEventos() {
         });
 
         // Chama o carrossel DEPOIS que os cards de EVENTOS forem criados
-        setupCarousels('[data-carousel-id="eventos"]');
+        setupCarousels('[data-carousel-id="eventos"]'); 
     } catch (error) {
         console.error("Erro ao carregar eventos:", error);
         track.innerHTML = `<p style="text-align:center;color:red;">Não foi possível carregar os eventos.</p>`;
